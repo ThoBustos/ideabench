@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
 const geist = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
   display: "swap",
+});
+
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  display: "swap",
+  weight: "400",
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -38,7 +46,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} antialiased`}>
+    <html lang="en" className={`${geist.variable} ${instrumentSerif.variable} antialiased`}>
       <body className="min-h-dvh font-sans">{children}</body>
     </html>
   );
