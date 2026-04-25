@@ -72,7 +72,7 @@ export default function Hero() {
               alt="Ideabench"
               style={{ width: "clamp(200px, 88vw, 320px)", height: "auto", filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.28)) drop-shadow(0 2px 4px rgba(0,0,0,0.18))" }}
               animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 7, ease: "easeInOut", repeat: Infinity }}
+              transition={{ duration: 15, ease: "easeInOut", repeat: Infinity }}
             />
           </div>
 
