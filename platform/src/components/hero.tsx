@@ -48,31 +48,23 @@ export default function Hero() {
           }}
         >
 
-          {/* ── Background ── */}
-          <div className="absolute inset-0 z-0">
-            <picture>
-              <source srcSet="/assets/hero-bg.webp" type="image/webp" />
-              <img src="/assets/hero-bg.png" alt="" className="h-full w-full object-cover" />
-            </picture>
-            <video
-              ref={videoRef}
-              muted playsInline preload="metadata"
-              className="absolute inset-0 h-full w-full object-cover"
-              style={{ opacity: videoVisible ? 1 : 0, transition: "opacity 1.5s ease" }}
-            >
-              <source src="/assets/video/hero-loop.webm" type="video/webm" />
-              <source src="/assets/video/hero-loop.mp4"  type="video/mp4"  />
-            </video>
-          </div>
+          {/* ── Background video (crossfades over the CSS bg image) ── */}
+          <video
+            ref={videoRef}
+            muted playsInline preload="metadata"
+            className="absolute inset-0 z-0 h-full w-full object-cover"
+            style={{ opacity: videoVisible ? 1 : 0, transition: "opacity 1.5s ease" }}
+          >
+            <source src="/assets/video/hero-loop.webm" type="video/webm" />
+            <source src="/assets/video/hero-loop.mp4"  type="video/mp4"  />
+          </video>
 
           {/* ── Logo ── */}
           <div className="absolute inset-x-0 z-[5] flex justify-center top-0 md:top-[4%]">
-            <m.img
+            <img
               src="/assets/logos/logo-c.svg"
               alt="Ideabench"
               style={{ width: "clamp(200px, 88vw, 320px)", height: "auto", filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.28)) drop-shadow(0 2px 4px rgba(0,0,0,0.18))" }}
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 15, ease: "easeInOut", repeat: Infinity }}
             />
           </div>
 
