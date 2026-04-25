@@ -185,9 +185,8 @@ export default function Hero() {
                 fontStyle:  "italic",
                 fontSize:   "clamp(1rem, 2vw, 1.5rem)",
                 fontWeight: 400,
-                color:      "rgba(255,255,255,0.9)",
+                color:      "rgba(17,24,39,0.45)",
                 lineHeight: 1.1,
-                textShadow: "0 1px 12px rgba(0,0,0,0.35)",
               }}
             >
               Where my ideas grow.
