@@ -4,6 +4,7 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
+import { useMountEffect } from "@/hooks/use-mount-effect"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
@@ -307,9 +308,9 @@ export const MetalButton = React.forwardRef<
   const [isHovered, setIsHovered] = React.useState(false);
   const [isTouchDevice, setIsTouchDevice] = React.useState(false);
 
-  React.useEffect(() => {
+  useMountEffect(() => {
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
-  }, []);
+  });
 
   const buttonText = children || "Button";
   const variants = metalButtonVariants(

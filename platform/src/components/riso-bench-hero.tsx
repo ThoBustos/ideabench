@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import type { Variants } from "motion/react";
 import {
   LazyMotion,
@@ -11,6 +11,7 @@ import {
   useMotionValue,
   animate,
 } from "motion/react";
+import { useMountEffect } from "@/hooks/use-mount-effect";
 import { useMouseParallax } from "@/hooks/use-mouse-parallax";
 import { useVideoLoop } from "@/hooks/use-video-loop";
 
@@ -112,22 +113,21 @@ export default function RisoBenchHero() {
   }, [x]);
 
   // SSR-safe: set random start after hydration
-  useEffect(() => {
+  useMountEffect(() => {
     const rand = MID + Math.floor(Math.random() * N);
     posRef.current = rand;
     x.set(trackToX(rand));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   // Auto-advance every 4 s
-  useEffect(() => {
+  useMountEffect(() => {
     const id = setInterval(() => {
       if (isBusy.current) return;
       isBusy.current = true;
       goTo(posRef.current + 1);
     }, 4000);
     return () => clearInterval(id);
-  }, [goTo]);
+  });
 
   /* ── Pointer-event drag ── */
   const dragStartX    = useRef<number | null>(null);

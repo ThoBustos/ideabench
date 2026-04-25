@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import {
   LazyMotion,
   domAnimation,
@@ -9,6 +9,7 @@ import {
   useMotionValue,
   animate,
 } from "motion/react";
+import { useMountEffect } from "@/hooks/use-mount-effect";
 import { useVideoLoop } from "@/hooks/use-video-loop";
 import Magnet from "@/components/ui/magnet";
 
@@ -60,22 +61,21 @@ export default function Hero() {
   }, [x]);
 
   // SSR-safe: start at index 0 (x=0) on server, jump to random mid-set card on client
-  useEffect(() => {
+  useMountEffect(() => {
     const rand = MID + Math.floor(Math.random() * N);
     posRef.current = rand;
     x.set(trackToX(rand));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   // Auto-advance every 4 s
-  useEffect(() => {
+  useMountEffect(() => {
     const id = setInterval(() => {
       if (isBusy.current) return;
       isBusy.current = true;
       goTo(posRef.current + 1);
     }, 4000);
     return () => clearInterval(id);
-  }, [goTo]);
+  });
 
   // ── Pointer-event drag (reliable on both touch and mouse) ──────────────
   const dragStartX      = useRef<number | null>(null);
@@ -190,32 +190,43 @@ export default function Hero() {
                   key={`${idea.id}-${i}`}
                   style={{ width: `${CARD_VW}vw`, flexShrink: 0, height: "100%" }}
                 >
-                  <div
-                    className="relative overflow-hidden w-full h-full"
-                    style={{
-                      borderRadius: 16,
-                      border: "1px solid rgba(255,255,255,0.3)",
-                      boxShadow: "0 12px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)",
-                    }}
+                  <a
+                    href={idea.href}
+                    className="group block h-full focus-visible:outline-none"
                   >
-                    <img src={idea.image} alt={idea.title} className="absolute inset-0 w-full h-full object-cover" />
                     <div
-                      className="absolute inset-0"
-                      style={{ background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.1) 40%, transparent 55%)" }}
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <h3 style={{
-                        fontFamily: SERIF,
-                        fontSize:   "1.15rem",
-                        fontWeight: 400,
-                        color:      "#fff",
-                        textShadow: "0 1px 4px rgba(0,0,0,0.5)",
-                        lineHeight: 1.2,
-                      }}>
-                        {idea.title}
-                      </h3>
+                      className="relative h-full w-full overflow-hidden"
+                      style={{
+                        borderRadius: 16,
+                        border: "1px solid rgba(255,255,255,0.3)",
+                        boxShadow: "0 12px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)",
+                      }}
+                    >
+                      <img src={idea.image} alt={idea.title} className="absolute inset-0 w-full h-full object-cover" />
+                      <div
+                        className="absolute inset-0"
+                        style={{ background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.1) 40%, transparent 55%)" }}
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <h3 style={{
+                          fontFamily: SERIF,
+                          fontSize:   "1.15rem",
+                          fontWeight: 400,
+                          color:      "#fff",
+                          textShadow: "0 1px 4px rgba(0,0,0,0.5)",
+                          lineHeight: 1.2,
+                        }}>
+                          {idea.title}
+                        </h3>
+                        <span
+                          className="mt-1.5 inline-block text-white/70 transition-colors duration-200 group-active:text-white"
+                          style={{ fontFamily: SANS, fontSize: "0.75rem" }}
+                        >
+                          Explore →
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  </a>
                 </div>
               ))}
             </m.div>

@@ -1,8 +1,15 @@
 "use client";
 
-import { useState, useEffect, useRef, type ReactNode } from "react";
+import {
+  useState,
+  useRef,
+  type CSSProperties,
+  type HTMLAttributes,
+  type ReactNode,
+} from "react";
+import { useMountEffect } from "@/hooks/use-mount-effect";
 
-interface MagnetProps {
+interface MagnetProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   padding?: number;
   disabled?: boolean;
@@ -28,14 +35,10 @@ export default function Magnet({
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const magnetRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (disabled) {
-      setPosition({ x: 0, y: 0 });
-      return;
-    }
-
+  useMountEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!magnetRef.current) return;
+      if (disabled) return;
 
       const { left, top, width, height } = magnetRef.current.getBoundingClientRect();
       const centerX = left + width / 2;
@@ -58,7 +61,14 @@ export default function Magnet({
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [padding, disabled, magnetStrength]);
+  });
+
+  const resolvedPosition = disabled ? { x: 0, y: 0 } : position;
+  const innerStyle: CSSProperties = {
+    transform: `translate3d(${resolvedPosition.x}px, ${resolvedPosition.y}px, 0)`,
+    transition: disabled || !isActive ? inactiveTransition : activeTransition,
+    willChange: "transform",
+  };
 
   return (
     <div
@@ -69,11 +79,7 @@ export default function Magnet({
     >
       <div
         className={innerClassName}
-        style={{
-          transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
-          transition: isActive ? activeTransition : inactiveTransition,
-          willChange: "transform",
-        }}
+        style={innerStyle}
       >
         {children}
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import {
   LazyMotion,
   domAnimation,
@@ -9,6 +9,7 @@ import {
   useMotionValue,
   animate,
 } from "motion/react";
+import { useMountEffect } from "@/hooks/use-mount-effect";
 import { useVideoLoop } from "@/hooks/use-video-loop";
 
 /* ── Logos ── */
@@ -61,19 +62,18 @@ function Panel({ logo }: { logo: typeof LOGOS[number] }) {
     });
   }, [x]);
 
-  useEffect(() => {
+  useMountEffect(() => {
     x.set(trackToX(posRef.current));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
-  useEffect(() => {
+  useMountEffect(() => {
     const id = setInterval(() => {
       if (isBusy.current) return;
       isBusy.current = true;
       goTo(posRef.current + 1);
     }, 4000);
     return () => clearInterval(id);
-  }, [goTo]);
+  });
 
   const dragStartX    = useRef<number | null>(null);
   const dragStartMX   = useRef(0);

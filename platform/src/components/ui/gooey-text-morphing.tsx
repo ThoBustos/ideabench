@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useMountEffect } from "@/hooks/use-mount-effect";
 import { cn } from "@/lib/utils";
 
 interface GooeyTextProps {
@@ -21,7 +22,7 @@ export function GooeyText({
   const text1Ref = React.useRef<HTMLSpanElement>(null);
   const text2Ref = React.useRef<HTMLSpanElement>(null);
 
-  React.useEffect(() => {
+  useMountEffect(() => {
     let textIndex = texts.length - 1;
     let time = new Date();
     let morph = 0;
@@ -90,7 +91,7 @@ export function GooeyText({
     return () => {
       cancelAnimationFrame(animId);
     };
-  }, [texts, morphTime, cooldownTime]);
+  });
 
   return (
     <div className={cn("relative", className)}>
