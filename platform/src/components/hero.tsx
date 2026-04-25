@@ -21,7 +21,6 @@ const IDEAS = [
   { id: 2, title: "The Writing Tool",  image: "/assets/ideas/desk.png",     href: "https://thomasbustos.com", x: 20, y: 27, rotate: 2    },
   { id: 3, title: "The Coding Tool",   image: "/assets/ideas/abstract.png", href: "https://thomasbustos.com", x: 58, y: 19, rotate: -1.5 },
   { id: 4, title: "The Design System", image: "/assets/ideas/window.png",   href: "https://thomasbustos.com", x: 76, y: 25, rotate: 3    },
-  { id: 5, title: "Feedback Widget",   image: "/assets/ideas/ghibli.png",   href: "https://thomasbustos.com", x: 40, y: 23, rotate: -2   },
 ];
 
 const N       = IDEAS.length;
