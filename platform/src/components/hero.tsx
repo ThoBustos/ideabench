@@ -68,7 +68,7 @@ export default function Hero() {
           {/* ── Logo ── */}
           <div className="absolute inset-x-0 z-[5] flex justify-center top-0 md:top-[4%]">
             <img src="/assets/logos/logo-c.svg" alt="Ideabench"
-              style={{ width: "clamp(200px, 88vw, 320px)", height: "auto", filter: "drop-shadow(0 6px 24px rgba(0,0,0,0.45)) drop-shadow(0 2px 6px rgba(0,0,0,0.3))" }} />
+              style={{ width: "clamp(200px, 88vw, 320px)", height: "auto", filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.28)) drop-shadow(0 2px 4px rgba(0,0,0,0.18))" }} />
           </div>
 
           {/* ── Mobile: Embla carousel ── */}
