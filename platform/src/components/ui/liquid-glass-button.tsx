@@ -57,8 +57,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = "Button"
 
-export { Button, buttonVariants, liquidbuttonVariants, LiquidButton }
-
 const liquidbuttonVariants = cva(
   "inline-flex items-center transition-colors justify-center cursor-pointer gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
@@ -102,6 +100,7 @@ function LiquidButton({
     asChild?: boolean
   }) {
   const Comp = asChild ? Slot : "button"
+  const filterId = React.useId()
 
   return (
     <>
@@ -119,25 +118,25 @@ function LiquidButton({
         dark:shadow-[0_0_8px_rgba(0,0,0,0.03),0_2px_6px_rgba(0,0,0,0.08),inset_3px_3px_0.5px_-3.5px_rgba(255,255,255,0.09),inset_-3px_-3px_0.5px_-3.5px_rgba(255,255,255,0.85),inset_1px_1px_1px_-0.5px_rgba(255,255,255,0.6),inset_-1px_-1px_1px_-0.5px_rgba(255,255,255,0.6),inset_0_0_6px_6px_rgba(255,255,255,0.12),inset_0_0_2px_2px_rgba(255,255,255,0.06),0_0_12px_rgba(0,0,0,0.15)]" />
         <div
           className="absolute top-0 left-0 isolate -z-10 h-full w-full overflow-hidden rounded-md"
-          style={{ backdropFilter: 'url("#container-glass")' }}
+          style={{ backdropFilter: `url("#${filterId}")` }}
         />
 
         <div className="pointer-events-none z-10 ">
           {children}
         </div>
-        <GlassFilter />
+        <GlassFilter id={filterId} />
       </Comp>
     </>
   )
 }
 
 
-function GlassFilter() {
+function GlassFilter({ id }: { id: string }) {
   return (
     <svg className="hidden">
       <defs>
         <filter
-          id="container-glass"
+          id={id}
           x="0%"
           y="0%"
           width="100%"
@@ -312,7 +311,6 @@ export const MetalButton = React.forwardRef<
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
   });
 
-  const buttonText = children || "Button";
   const variants = metalButtonVariants(
     variant,
     isPressed,
@@ -337,7 +335,7 @@ export const MetalButton = React.forwardRef<
         onTouchCancel={() => setIsPressed(false)}
       >
         <ShineEffect isPressed={isPressed} />
-        {buttonText}
+        {children}
         {isHovered && !isPressed && !isTouchDevice && (
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t rounded-lg from-transparent to-white/5" />
         )}
@@ -347,3 +345,5 @@ export const MetalButton = React.forwardRef<
 });
 
 MetalButton.displayName = "MetalButton";
+
+export { Button, buttonVariants, liquidbuttonVariants, LiquidButton };

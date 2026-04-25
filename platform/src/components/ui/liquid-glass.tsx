@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useId } from "react";
 import { motion, type HTMLMotionProps, type Variants } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -8,7 +9,7 @@ type BlurIntensity = "sm" | "md" | "lg" | "xl";
 type ShadowIntensity = "none" | "xs" | "sm" | "md" | "lg" | "xl";
 type GlowIntensity = "none" | "xs" | "sm" | "md" | "lg" | "xl";
 
-interface LiquidGlassCardProps {
+interface LiquidGlassCardProps extends Omit<HTMLMotionProps<"div">, "draggable" | "children"> {
   children: React.ReactNode;
   className?: string;
   draggable?: boolean;
@@ -38,6 +39,7 @@ export const LiquidGlassCard = ({
   shadowIntensity = "md",
   ...props
 }: LiquidGlassCardProps) => {
+  const filterId = useId();
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   const handleToggleExpansion = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -110,7 +112,7 @@ export const LiquidGlassCard = ({
       <svg className="hidden">
         <defs>
           <filter
-            id="glass-blur"
+            id={filterId}
             x="0"
             y="0"
             width="100%"
@@ -148,7 +150,7 @@ export const LiquidGlassCard = ({
       >
         <div
           className={`absolute inset-0 ${blurClasses[blurIntensity]} z-0`}
-          style={{ borderRadius, filter: "url(#glass-blur)" }}
+          style={{ borderRadius, filter: `url(#${filterId})` }}
         />
         <div
           className="absolute inset-0 z-10"

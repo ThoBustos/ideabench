@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
   LazyMotion,
   domAnimation,
@@ -13,7 +13,7 @@ import { useMountEffect } from "@/hooks/use-mount-effect";
 import { useVideoLoop } from "@/hooks/use-video-loop";
 import Magnet from "@/components/ui/magnet";
 
-const SERIF = "'Instrument Serif', Georgia, serif";
+const SERIF = "var(--font-instrument-serif), Georgia, serif";
 const SANS  = "var(--font-geist-sans), system-ui, sans-serif";
 
 const IDEAS = [
@@ -25,8 +25,8 @@ const IDEAS = [
 
 const N       = IDEAS.length;
 // Triple array — start in the middle set so both sides have infinite buffer
-const TRACK   = [...IDEAS, ...IDEAS, ...IDEAS];   // 15 items, indices 0-14
-const MID     = N;                                // middle set starts at index 5
+const TRACK   = [...IDEAS, ...IDEAS, ...IDEAS];   // 12 items, indices 0-11
+const MID     = N;                                // middle set starts at index 4
 
 const CARD_VW = 72;
 const GAP_VW  = 7;
@@ -42,6 +42,11 @@ function trackToX(trackIdx: number) {
 
 export default function Hero() {
   const { videoRef, videoVisible } = useVideoLoop(8000);
+  const [isTouch, setIsTouch] = useState(false);
+
+  useMountEffect(() => {
+    setIsTouch("ontouchstart" in window || navigator.maxTouchPoints > 0);
+  });
 
   const x      = useMotionValue(0);
   const posRef = useRef(MID);           // current track index, starts at middle set
@@ -132,8 +137,6 @@ export default function Hero() {
   return (
     <MotionConfig reducedMotion="user">
       <LazyMotion features={domAnimation}>
-        <style>{`@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');`}</style>
-
         <div className="relative h-dvh overflow-hidden">
 
           {/* ── Background ── */}
@@ -153,14 +156,10 @@ export default function Hero() {
             </video>
           </div>
 
-          {/* ── Logo: mobile large, desktop smaller ── */}
+          {/* ── Logo ── */}
           <div className="absolute inset-x-0 z-[5] flex justify-center" style={{ top: "4%" }}>
-            {/* mobile */}
             <img src="/assets/logos/logo-c.svg" alt="Ideabench"
-              className="md:hidden" style={{ width: "88vw", height: "auto" }} />
-            {/* desktop */}
-            <img src="/assets/logos/logo-c.svg" alt="Ideabench"
-              className="hidden md:block" style={{ width: "320px", height: "auto" }} />
+              style={{ width: "clamp(200px, 88vw, 320px)", height: "auto" }} />
           </div>
 
           {/* ── Mobile: swipeable infinite carousel ── */}
@@ -241,7 +240,7 @@ export default function Hero() {
               className="hidden md:block absolute z-[3]"
               style={{ left: `${idea.x}%`, top: `${idea.y}%` }}
             >
-              <Magnet padding={50} magnetStrength={6}>
+              <Magnet padding={50} magnetStrength={6} disabled={isTouch}>
                 <a href={idea.href} className="block group">
                   <div
                     className="relative overflow-hidden"

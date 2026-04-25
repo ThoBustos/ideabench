@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useId } from "react";
 import { useMountEffect } from "@/hooks/use-mount-effect";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +20,7 @@ export function GooeyText({
   className,
   textClassName
 }: GooeyTextProps) {
+  const filterId = useId();
   const text1Ref = React.useRef<HTMLSpanElement>(null);
   const text2Ref = React.useRef<HTMLSpanElement>(null);
 
@@ -97,7 +99,7 @@ export function GooeyText({
     <div className={cn("relative", className)}>
       <svg className="absolute h-0 w-0" aria-hidden="true" focusable="false">
         <defs>
-          <filter id="threshold">
+          <filter id={filterId}>
             <feColorMatrix
               in="SourceGraphic"
               type="matrix"
@@ -112,7 +114,7 @@ export function GooeyText({
 
       <div
         className="flex items-center justify-center"
-        style={{ filter: "url(#threshold)" }}
+        style={{ filter: `url(#${filterId})` }}
       >
         <span
           ref={text1Ref}

@@ -3,11 +3,11 @@
 import {
   useState,
   useRef,
+  useEffect,
   type CSSProperties,
   type HTMLAttributes,
   type ReactNode,
 } from "react";
-import { useMountEffect } from "@/hooks/use-mount-effect";
 
 interface MagnetProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
@@ -34,11 +34,18 @@ export default function Magnet({
   const [isActive, setIsActive] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const magnetRef = useRef<HTMLDivElement>(null);
+  const disabledRef = useRef(disabled);
+  const magnetStrengthRef = useRef(magnetStrength);
+  const paddingRef = useRef(padding);
 
-  useMountEffect(() => {
+  disabledRef.current = disabled;
+  magnetStrengthRef.current = magnetStrength;
+  paddingRef.current = padding;
+
+  useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!magnetRef.current) return;
-      if (disabled) return;
+      if (disabledRef.current) return;
 
       const { left, top, width, height } = magnetRef.current.getBoundingClientRect();
       const centerX = left + width / 2;
@@ -47,11 +54,11 @@ export default function Magnet({
       const distX = Math.abs(centerX - e.clientX);
       const distY = Math.abs(centerY - e.clientY);
 
-      if (distX < width / 2 + padding && distY < height / 2 + padding) {
+      if (distX < width / 2 + paddingRef.current && distY < height / 2 + paddingRef.current) {
         setIsActive(true);
         setPosition({
-          x: (e.clientX - centerX) / magnetStrength,
-          y: (e.clientY - centerY) / magnetStrength,
+          x: (e.clientX - centerX) / magnetStrengthRef.current,
+          y: (e.clientY - centerY) / magnetStrengthRef.current,
         });
       } else {
         setIsActive(false);
@@ -61,7 +68,8 @@ export default function Magnet({
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const resolvedPosition = disabled ? { x: 0, y: 0 } : position;
   const innerStyle: CSSProperties = {
