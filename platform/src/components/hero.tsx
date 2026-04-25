@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useCallback, useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   LazyMotion,
   domAnimation,
   m,
   MotionConfig,
-  useMotionValue,
-  animate,
 } from "motion/react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 import { useMountEffect } from "@/hooks/use-mount-effect";
 import { useVideoLoop } from "@/hooks/use-video-loop";
 import Magnet from "@/components/ui/magnet";
@@ -23,23 +23,6 @@ const IDEAS = [
   { id: 4, title: "The Design System", image: "/assets/ideas/window.png",   href: "https://thomasbustos.com", x: 74, y: 26, rotate: 3    },
 ];
 
-const N       = IDEAS.length;
-// Triple array — start in the middle set so both sides have infinite buffer
-const TRACK   = [...IDEAS, ...IDEAS, ...IDEAS];   // 12 items, indices 0-11
-const MID     = N;                                // middle set starts at index 4
-
-const CARD_VW = 72;
-const GAP_VW  = 7;
-const STEP_VW = CARD_VW + GAP_VW;
-const LEFT_VW = (100 - CARD_VW) / 2;             // centers a card in viewport
-
-const SPRING  = { type: "spring" as const, stiffness: 55, damping: 18, mass: 1 };
-
-function trackToX(trackIdx: number) {
-  const vw = window.innerWidth / 100;
-  return (LEFT_VW - trackIdx * STEP_VW) * vw;
-}
-
 export default function Hero() {
   const { videoRef, videoVisible } = useVideoLoop(8000);
   const [isTouch, setIsTouch] = useState(false);
@@ -48,91 +31,10 @@ export default function Hero() {
     setIsTouch("ontouchstart" in window || navigator.maxTouchPoints > 0);
   });
 
-  const x      = useMotionValue(0);
-  const posRef = useRef(MID);           // current track index, starts at middle set
-  const isBusy = useRef(false);
-
-  // Animate to newIdx, then silently re-centre in middle set if we drifted
-  const goTo = useCallback((newIdx: number) => {
-    animate(x, trackToX(newIdx), SPRING).then(() => {
-      let settled = newIdx;
-      if (newIdx >= N * 2) settled = newIdx - N;
-      else if (newIdx < N) settled = newIdx + N;
-      if (settled !== newIdx) x.set(trackToX(settled));
-      posRef.current = settled;
-      isBusy.current = false;
-    });
-  }, [x]);
-
-  // SSR-safe: start at index 0 (x=0) on server, jump to random mid-set card on client
-  useMountEffect(() => {
-    const rand = MID + Math.floor(Math.random() * N);
-    posRef.current = rand;
-    x.set(trackToX(rand));
-  });
-
-  // Auto-advance every 4 s
-  useMountEffect(() => {
-    const id = setInterval(() => {
-      if (isBusy.current) return;
-      isBusy.current = true;
-      goTo(posRef.current + 1);
-    }, 4000);
-    return () => clearInterval(id);
-  });
-
-  // ── Pointer-event drag (reliable on both touch and mouse) ──────────────
-  const dragStartX      = useRef<number | null>(null);
-  const dragStartMX     = useRef(0);
-  const lastPtrSample   = useRef<{ x: number; t: number } | null>(null);
-
-  const onPointerDown = useCallback((e: React.PointerEvent) => {
-    isBusy.current = true;
-    dragStartX.current    = e.clientX;
-    dragStartMX.current   = x.get();
-    lastPtrSample.current = { x: e.clientX, t: Date.now() };
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-  }, [x]);
-
-  const onPointerMove = useCallback((e: React.PointerEvent) => {
-    if (dragStartX.current === null) return;
-    x.set(dragStartMX.current + (e.clientX - dragStartX.current));
-    lastPtrSample.current = { x: e.clientX, t: Date.now() };
-  }, [x]);
-
-  const onPointerUp = useCallback((e: React.PointerEvent) => {
-    if (dragStartX.current === null) return;
-    const delta = e.clientX - dragStartX.current;
-
-    // Estimate velocity from last sample (px/s)
-    let vel = 0;
-    if (lastPtrSample.current) {
-      const dt = Date.now() - lastPtrSample.current.t;
-      if (dt > 0 && dt < 150) {
-        vel = (e.clientX - lastPtrSample.current.x) / dt * 1000;
-      }
-    }
-
-    dragStartX.current    = null;
-    lastPtrSample.current = null;
-
-    if (delta < -40 || vel < -400) {
-      goTo(posRef.current + 1);
-    } else if (delta > 40 || vel > 400) {
-      goTo(posRef.current - 1);
-    } else {
-      isBusy.current = false;
-      animate(x, trackToX(posRef.current), SPRING);
-    }
-  }, [goTo, x]);
-
-  const onPointerCancel = useCallback(() => {
-    if (dragStartX.current === null) return;
-    dragStartX.current    = null;
-    lastPtrSample.current = null;
-    isBusy.current        = false;
-    animate(x, trackToX(posRef.current), SPRING);
-  }, [x]);
+  const [emblaRef] = useEmblaCarousel(
+    { loop: true, align: "center", skipSnaps: false, dragFree: false },
+    [Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true })]
+  );
 
   return (
     <MotionConfig reducedMotion="user">
@@ -162,72 +64,61 @@ export default function Hero() {
               style={{ width: "clamp(200px, 88vw, 320px)", height: "auto" }} />
           </div>
 
-          {/* ── Mobile: swipeable infinite carousel ── */}
+          {/* ── Mobile: Embla carousel ── */}
           <div
-            className="md:hidden absolute inset-x-0 z-[3] overflow-hidden"
+            className="md:hidden absolute inset-x-0 z-[3]"
             style={{ top: "22%", height: "38vh" }}
           >
-            <m.div
-              style={{
-                x,
-                display:     "flex",
-                height:      "100%",
-                gap:         `${GAP_VW}vw`,
-                touchAction: "none",
-                cursor:      "grab",
-                userSelect:  "none",
-              }}
-              onPointerDown={onPointerDown}
-              onPointerMove={onPointerMove}
-              onPointerUp={onPointerUp}
-              onPointerLeave={onPointerCancel}
-              onPointerCancel={onPointerCancel}
-            >
-              {TRACK.map((idea, i) => (
-                <div
-                  key={`${idea.id}-${i}`}
-                  style={{ width: `${CARD_VW}vw`, flexShrink: 0, height: "100%" }}
-                >
-                  <a
-                    href={idea.href}
-                    className="group block h-full focus-visible:outline-none"
+            <div ref={emblaRef} className="overflow-hidden h-full">
+              <div className="flex h-full" style={{ marginLeft: "-7vw" }}>
+                {IDEAS.map((idea) => (
+                  <div
+                    key={idea.id}
+                    className="relative flex-none h-full"
+                    style={{ paddingLeft: "7vw", width: "79vw" }}
                   >
-                    <div
-                      className="relative h-full w-full overflow-hidden"
-                      style={{
-                        borderRadius: 16,
-                        border: "1px solid rgba(255,255,255,0.3)",
-                        boxShadow: "0 12px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)",
-                      }}
+                    <a
+                      href={idea.href}
+                      className="group block h-full focus-visible:outline-none"
+                      draggable={false}
                     >
-                      <img src={idea.image} alt={idea.title} className="absolute inset-0 w-full h-full object-cover" />
                       <div
-                        className="absolute inset-0"
-                        style={{ background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.1) 40%, transparent 55%)" }}
-                      />
-                      <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <h3 style={{
-                          fontFamily: SERIF,
-                          fontSize:   "1.15rem",
-                          fontWeight: 400,
-                          color:      "#fff",
-                          textShadow: "0 1px 4px rgba(0,0,0,0.5)",
-                          lineHeight: 1.2,
-                        }}>
-                          {idea.title}
-                        </h3>
-                        <span
-                          className="mt-1.5 inline-block text-white/70 transition-colors duration-200 group-active:text-white"
-                          style={{ fontFamily: SANS, fontSize: "0.75rem" }}
-                        >
-                          Explore →
-                        </span>
+                        className="relative h-full w-full overflow-hidden"
+                        style={{
+                          borderRadius: 16,
+                          border: "1px solid rgba(255,255,255,0.3)",
+                          boxShadow: "0 12px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)",
+                        }}
+                      >
+                        <img src={idea.image} alt={idea.title} className="absolute inset-0 h-full w-full object-cover" draggable={false} />
+                        <div
+                          className="absolute inset-0"
+                          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.1) 40%, transparent 55%)" }}
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 p-4">
+                          <h3 style={{
+                            fontFamily: SERIF,
+                            fontSize:   "1.15rem",
+                            fontWeight: 400,
+                            color:      "#fff",
+                            textShadow: "0 1px 4px rgba(0,0,0,0.5)",
+                            lineHeight: 1.2,
+                          }}>
+                            {idea.title}
+                          </h3>
+                          <span
+                            className="mt-1.5 inline-block text-white/70 transition-colors duration-200 group-active:text-white"
+                            style={{ fontFamily: SANS, fontSize: "0.75rem" }}
+                          >
+                            Explore →
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </a>
-                </div>
-              ))}
-            </m.div>
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* ── Desktop: scattered absolute cards ── */}
