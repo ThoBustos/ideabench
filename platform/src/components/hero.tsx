@@ -39,7 +39,14 @@ export default function Hero() {
   return (
     <MotionConfig reducedMotion="user">
       <LazyMotion features={domAnimation}>
-        <div className="relative h-dvh overflow-hidden">
+        <div
+          className="relative h-dvh overflow-hidden"
+          style={{
+            backgroundImage: "url('/assets/hero-bg.webp'), url('/assets/hero-bg.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
 
           {/* ── Background ── */}
           <div className="absolute inset-0 z-0">
@@ -61,7 +68,7 @@ export default function Hero() {
           {/* ── Logo ── */}
           <div className="absolute inset-x-0 z-[5] flex justify-center top-0 md:top-[4%]">
             <img src="/assets/logos/logo-c.svg" alt="Ideabench"
-              style={{ width: "clamp(200px, 88vw, 320px)", height: "auto" }} />
+              style={{ width: "clamp(200px, 88vw, 320px)", height: "auto", filter: "drop-shadow(0 2px 12px rgba(0,0,0,0.18))" }} />
           </div>
 
           {/* ── Mobile: Embla carousel ── */}
