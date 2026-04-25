@@ -17,10 +17,10 @@ const SERIF = "var(--font-instrument-serif), Georgia, serif";
 const SANS  = "var(--font-geist-sans), system-ui, sans-serif";
 
 const IDEAS = [
-  { id: 1, title: "AI Native Club",    image: "/assets/ideas/ghibli.png",   href: "https://thomasbustos.com", x: 3,  y: 21, rotate: -3   },
-  { id: 2, title: "The Writing Tool",  image: "/assets/ideas/desk.png",     href: "https://thomasbustos.com", x: 20, y: 27, rotate: 2    },
-  { id: 3, title: "The Coding Tool",   image: "/assets/ideas/abstract.png", href: "https://thomasbustos.com", x: 58, y: 19, rotate: -1.5 },
-  { id: 4, title: "The Design System", image: "/assets/ideas/window.png",   href: "https://thomasbustos.com", x: 76, y: 25, rotate: 3    },
+  { id: 1, title: "AI Native Club",    image: "/assets/ideas/ghibli.png",   href: "https://thomasbustos.com", x: 4,  y: 21, rotate: -3   },
+  { id: 2, title: "The Writing Tool",  image: "/assets/ideas/desk.png",     href: "https://thomasbustos.com", x: 27, y: 28, rotate: 2    },
+  { id: 3, title: "The Coding Tool",   image: "/assets/ideas/abstract.png", href: "https://thomasbustos.com", x: 51, y: 20, rotate: -1.5 },
+  { id: 4, title: "The Design System", image: "/assets/ideas/window.png",   href: "https://thomasbustos.com", x: 74, y: 26, rotate: 3    },
 ];
 
 const N       = IDEAS.length;
@@ -157,7 +157,7 @@ export default function Hero() {
           </div>
 
           {/* ── Logo ── */}
-          <div className="absolute inset-x-0 z-[5] flex justify-center" style={{ top: "4%" }}>
+          <div className="absolute inset-x-0 z-[5] flex justify-center top-0 md:top-[4%]">
             <img src="/assets/logos/logo-c.svg" alt="Ideabench"
               style={{ width: "clamp(200px, 88vw, 320px)", height: "auto" }} />
           </div>
@@ -165,7 +165,7 @@ export default function Hero() {
           {/* ── Mobile: swipeable infinite carousel ── */}
           <div
             className="md:hidden absolute inset-x-0 z-[3] overflow-hidden"
-            style={{ top: "15%", height: "38vh" }}
+            style={{ top: "22%", height: "38vh" }}
           >
             <m.div
               style={{
