@@ -46,7 +46,6 @@ const IDEAS = [
   { id: 2, title: "The Writing Tool",  image: "/assets/ideas/desk.png",     href: "/ideas/writing"           },
   { id: 3, title: "The Coding Tool",   image: "/assets/ideas/abstract.png", href: "/ideas/coding"            },
   { id: 4, title: "The Design System", image: "/assets/ideas/window.png",   href: "/ideas/design"            },
-  { id: 5, title: "Feedback Widget",   image: "/assets/ideas/ghibli.png",   href: "/ideas/feedback"          },
 ];
 
 const N       = IDEAS.length;
