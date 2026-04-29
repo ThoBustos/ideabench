@@ -1,14 +1,6 @@
 import { useState, useRef } from "react";
 import { useMountEffect } from "./use-mount-effect";
 
-/**
- * Plays a video, fades it out when done, waits `pauseMs`,
- * then fades it back in and replays. Static image stays
- * underneath so there's never a flash.
- *
- * Handles browser power-saving interruptions gracefully —
- * if play() is rejected, hides the video and retries next cycle.
- */
 export function useVideoLoop(pauseMs = 8000, initialDelayMs = 2000) {
   const [videoVisible, setVideoVisible] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -24,7 +16,6 @@ export function useVideoLoop(pauseMs = 8000, initialDelayMs = 2000) {
       video.currentTime = 0;
       setVideoVisible(true);
       video.play().catch(() => {
-        // Browser paused video to save power — hide and retry next cycle
         if (!disposed) {
           setVideoVisible(false);
           timeout = setTimeout(safePlay, pauseMs);
@@ -38,12 +29,27 @@ export function useVideoLoop(pauseMs = 8000, initialDelayMs = 2000) {
       timeout = setTimeout(safePlay, pauseMs);
     };
 
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        // Tab hidden — hide video so image shows when tab is restored
+        video.pause();
+        setVideoVisible(false);
+        clearTimeout(timeout);
+      } else {
+        // Tab visible again — restart cycle after brief delay
+        if (!disposed) timeout = setTimeout(safePlay, 500);
+      }
+    };
+
     const initialTimeout = setTimeout(safePlay, initialDelayMs);
 
     video.addEventListener("ended", onEnded);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
     return () => {
       disposed = true;
       video.removeEventListener("ended", onEnded);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       clearTimeout(timeout);
       clearTimeout(initialTimeout);
     };

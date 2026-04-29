@@ -16,6 +16,7 @@ const instrumentSerif = Instrument_Serif({
   style: ["normal", "italic"],
 });
 
+
 export const metadata: Metadata = {
   title: "IdeaBench — Where my ideas grow.",
   description:
