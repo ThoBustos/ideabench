@@ -2,7 +2,6 @@
 
 import React, { useState, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import {
   LazyMotion,
   domAnimation,
@@ -374,14 +373,6 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
             >
               by Thomas Bustos
             </a>
-            <span>·</span>
-            <Link
-              href="/font-lab"
-              className="tracking-[0.15em] uppercase transition-colors hover:text-teal-900/70"
-              style={{ color: "inherit" }}
-            >
-              font lab
-            </Link>
           </div>
 
         </div>

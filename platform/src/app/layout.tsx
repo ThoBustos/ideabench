@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Instrument_Serif, Playfair_Display, Fraunces, Syne } from "next/font/google";
+import { Geist, Instrument_Serif, Fraunces } from "next/font/google";
 import "./globals.css";
 
 const geist = Geist({
@@ -16,28 +16,12 @@ const instrumentSerif = Instrument_Serif({
   style: ["normal", "italic"],
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "700"],
-  style: ["normal", "italic"],
-});
-
 const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
   display: "swap",
   style: ["normal", "italic"],
 });
-
-const syne = Syne({
-  variable: "--font-syne",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "600", "700", "800"],
-});
-
 
 export const metadata: Metadata = {
   title: "IdeaBench — Where my ideas grow.",
@@ -69,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${instrumentSerif.variable} ${playfair.variable} ${fraunces.variable} ${syne.variable} antialiased`}>
+    <html lang="en" className={`${geist.variable} ${instrumentSerif.variable} ${fraunces.variable} antialiased`}>
       <body className="min-h-dvh font-sans">{children}</body>
     </html>
   );
