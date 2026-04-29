@@ -19,6 +19,8 @@ import Magnet from "@/components/ui/magnet";
 const SERIF = "var(--font-instrument-serif), Georgia, serif";
 const SANS  = "var(--font-geist-sans), system-ui, sans-serif";
 
+const FRAUNCES = "var(--font-fraunces), Georgia, serif";
+
 type Idea = {
   id: number;
   title: string;
@@ -272,7 +274,7 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
         >
 
           {/* ── Background overlay ── */}
-          <div className="absolute inset-0 z-[1] pointer-events-none" style={{ background: "rgba(255,235,200,0.28)" }} />
+          <div className="absolute inset-0 z-[1] pointer-events-none" style={{ background: "rgba(90,60,150,0.16)" }} />
 
           {/* ── Background video (crossfades over the CSS bg image) ── */}
           <video
@@ -285,17 +287,37 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
             <source src="/assets/video/hero-loop.mp4"  type="video/mp4"  />
           </video>
 
-          {/* ── Logo ── */}
-          <div className="absolute inset-x-0 z-[5] flex justify-center top-0 md:top-[4%]">
-            <Image
-              src="/assets/logos/logo-c.svg"
-              alt="Ideabench"
-              width={320}
-              height={183}
-              priority
-              unoptimized
-              style={{ width: "clamp(200px, 88vw, 320px)", height: "auto", filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.28)) drop-shadow(0 2px 4px rgba(0,0,0,0.18))" }}
-            />
+          {/* ── Logo + tagline lockup ── */}
+          <div className="absolute inset-x-0 z-[5] flex flex-col items-center top-0 md:top-[4%] pt-3 md:pt-0 gap-1.5">
+            <h1
+              style={{
+                fontFamily: FRAUNCES,
+                fontSize: "clamp(2.5rem, 10vw, 4.5rem)",
+                fontWeight: 300,
+                fontStyle: "italic",
+                letterSpacing: "-0.01em",
+                color: "rgba(245,240,255,0.92)",
+                lineHeight: 1,
+                userSelect: "none",
+                margin: 0,
+              }}
+            >
+              ideabench
+            </h1>
+            <p
+              style={{
+                fontFamily: FRAUNCES,
+                fontSize: "clamp(0.7rem, 1.3vw, 0.9rem)",
+                fontStyle: "normal",
+                fontWeight: 300,
+                color: "rgba(245,240,255,0.52)",
+                lineHeight: 1,
+                userSelect: "none",
+                margin: 0,
+              }}
+            >
+              Where my ideas grow.
+            </p>
           </div>
 
           {/* ── Mobile: Embla carousel ── */}
@@ -328,30 +350,10 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
             />
           ))}
 
-          {/* ── Tagline ── */}
-          <div className="absolute inset-0 z-[5] flex items-end justify-center pointer-events-none pb-[4vh]">
-            <m.h1
-              initial={{ opacity: 0, filter: "blur(6px)" }}
-              animate={{ opacity: 1, filter: "blur(0px)" }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-center px-6"
-              style={{
-                fontFamily: SERIF,
-                fontStyle:  "italic",
-                fontSize:   "clamp(1rem, 2vw, 1.5rem)",
-                fontWeight: 400,
-                color:      "rgba(17,24,39,0.45)",
-                lineHeight: 1.1,
-              }}
-            >
-              Where my ideas grow.
-            </m.h1>
-          </div>
-
           {/* ── Footer ── */}
           <div
             className="absolute bottom-3 left-0 right-0 z-[5] text-center flex items-center justify-center gap-1.5"
-            style={{ fontSize: "0.5625rem", color: "rgba(17,24,39,0.45)", fontFamily: SANS }}
+            style={{ fontSize: "0.5625rem", color: "rgba(20,28,45,0.55)", fontFamily: SANS }}
           >
             <a
               href="https://ideabench.ai"

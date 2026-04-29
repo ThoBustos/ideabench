@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Instrument_Serif } from "next/font/google";
+import { Geist, Instrument_Serif, Fraunces } from "next/font/google";
 import "./globals.css";
 
 const geist = Geist({
@@ -16,6 +16,12 @@ const instrumentSerif = Instrument_Serif({
   style: ["normal", "italic"],
 });
 
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  display: "swap",
+  style: ["normal", "italic"],
+});
 
 export const metadata: Metadata = {
   title: "IdeaBench — Where my ideas grow.",
@@ -47,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${instrumentSerif.variable} antialiased`}>
+    <html lang="en" className={`${geist.variable} ${instrumentSerif.variable} ${fraunces.variable} antialiased`}>
       <body className="min-h-dvh font-sans">{children}</body>
     </html>
   );
