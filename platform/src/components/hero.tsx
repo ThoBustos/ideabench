@@ -97,8 +97,8 @@ function DesktopCard({
           <div
             className="relative overflow-hidden"
             style={{
-              width:  "clamp(220px, 22vw, 320px)",
-              height: "clamp(300px, 30vw, 440px)",
+              width:  "clamp(165px, 16.5vw, 240px)",
+              height: "clamp(225px, 22.5vw, 330px)",
               borderRadius: 16,
               border: "1px solid rgba(255,255,255,0.3)",
               transform: `rotate(${idea.rotate}deg)`,
@@ -112,7 +112,7 @@ function DesktopCard({
               loading="lazy"
               className="absolute inset-0 w-full h-full object-cover"
               draggable={false}
-              sizes="(min-width: 768px) 22vw, 79vw"
+              sizes="(min-width: 768px) 16.5vw, 79vw"
             />
             {idea.video && (
               <video
