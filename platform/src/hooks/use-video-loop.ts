@@ -1,51 +1,70 @@
 import { useState, useRef } from "react";
 import { useMountEffect } from "./use-mount-effect";
 
-/**
- * Plays a video, fades it out when done, waits `pauseMs`,
- * then fades it back in and replays. Static image stays
- * underneath so there's never a flash.
- *
- * Handles browser power-saving interruptions gracefully —
- * if play() is rejected, hides the video and retries next cycle.
- */
 export function useVideoLoop(pauseMs = 8000, initialDelayMs = 2000) {
   const [videoVisible, setVideoVisible] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useMountEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+    const video = videoElement;
 
-    let timeout: ReturnType<typeof setTimeout>;
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    let initialTimeout: ReturnType<typeof setTimeout> | undefined;
     let disposed = false;
 
-    const safePlay = () => {
+    function clearScheduledPlay() {
+      if (timeout) clearTimeout(timeout);
+      if (initialTimeout) clearTimeout(initialTimeout);
+      timeout = undefined;
+      initialTimeout = undefined;
+    }
+
+    function schedulePlay(delay: number) {
+      clearScheduledPlay();
+      timeout = setTimeout(safePlay, delay);
+    }
+
+    function safePlay() {
+      if (disposed || document.hidden) return;
       video.currentTime = 0;
       setVideoVisible(true);
       video.play().catch(() => {
-        // Browser paused video to save power — hide and retry next cycle
         if (!disposed) {
           setVideoVisible(false);
-          timeout = setTimeout(safePlay, pauseMs);
+          schedulePlay(pauseMs);
         }
       });
-    };
+    }
 
     const onEnded = () => {
       if (disposed) return;
       setVideoVisible(false);
-      timeout = setTimeout(safePlay, pauseMs);
+      schedulePlay(pauseMs);
     };
 
-    const initialTimeout = setTimeout(safePlay, initialDelayMs);
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        // Keep the static image visible while the tab is backgrounded.
+        video.pause();
+        setVideoVisible(false);
+        clearScheduledPlay();
+      } else {
+        if (!disposed) schedulePlay(500);
+      }
+    };
+
+    initialTimeout = setTimeout(safePlay, initialDelayMs);
 
     video.addEventListener("ended", onEnded);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
     return () => {
       disposed = true;
       video.removeEventListener("ended", onEnded);
-      clearTimeout(timeout);
-      clearTimeout(initialTimeout);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      clearScheduledPlay();
     };
   });
 
