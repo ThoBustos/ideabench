@@ -289,8 +289,7 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
 
           {/* ── Logo + tagline lockup ── */}
           <div className="absolute inset-x-0 z-[5] flex flex-col items-center top-0 md:top-[4%] pt-3 md:pt-0 gap-1.5">
-            <span
-              aria-label="Ideabench"
+            <h1
               style={{
                 fontFamily: FRAUNCES,
                 fontSize: "clamp(2.5rem, 10vw, 4.5rem)",
@@ -300,11 +299,12 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
                 color: "rgba(245,240,255,0.92)",
                 lineHeight: 1,
                 userSelect: "none",
+                margin: 0,
               }}
             >
               ideabench
-            </span>
-            <span
+            </h1>
+            <p
               style={{
                 fontFamily: FRAUNCES,
                 fontSize: "clamp(0.7rem, 1.3vw, 0.9rem)",
@@ -313,10 +313,11 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
                 color: "rgba(245,240,255,0.52)",
                 lineHeight: 1,
                 userSelect: "none",
+                margin: 0,
               }}
             >
               Where my ideas grow.
-            </span>
+            </p>
           </div>
 
           {/* ── Mobile: Embla carousel ── */}
