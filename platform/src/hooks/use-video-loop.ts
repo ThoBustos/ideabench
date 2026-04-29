@@ -6,42 +6,56 @@ export function useVideoLoop(pauseMs = 8000, initialDelayMs = 2000) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useMountEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+    const video = videoElement;
 
-    let timeout: ReturnType<typeof setTimeout>;
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    let initialTimeout: ReturnType<typeof setTimeout> | undefined;
     let disposed = false;
 
-    const safePlay = () => {
+    function clearScheduledPlay() {
+      if (timeout) clearTimeout(timeout);
+      if (initialTimeout) clearTimeout(initialTimeout);
+      timeout = undefined;
+      initialTimeout = undefined;
+    }
+
+    function schedulePlay(delay: number) {
+      clearScheduledPlay();
+      timeout = setTimeout(safePlay, delay);
+    }
+
+    function safePlay() {
+      if (disposed || document.hidden) return;
       video.currentTime = 0;
       setVideoVisible(true);
       video.play().catch(() => {
         if (!disposed) {
           setVideoVisible(false);
-          timeout = setTimeout(safePlay, pauseMs);
+          schedulePlay(pauseMs);
         }
       });
-    };
+    }
 
     const onEnded = () => {
       if (disposed) return;
       setVideoVisible(false);
-      timeout = setTimeout(safePlay, pauseMs);
+      schedulePlay(pauseMs);
     };
 
     const onVisibilityChange = () => {
       if (document.hidden) {
-        // Tab hidden — hide video so image shows when tab is restored
+        // Keep the static image visible while the tab is backgrounded.
         video.pause();
         setVideoVisible(false);
-        clearTimeout(timeout);
+        clearScheduledPlay();
       } else {
-        // Tab visible again — restart cycle after brief delay
-        if (!disposed) timeout = setTimeout(safePlay, 500);
+        if (!disposed) schedulePlay(500);
       }
     };
 
-    const initialTimeout = setTimeout(safePlay, initialDelayMs);
+    initialTimeout = setTimeout(safePlay, initialDelayMs);
 
     video.addEventListener("ended", onEnded);
     document.addEventListener("visibilitychange", onVisibilityChange);
@@ -50,8 +64,7 @@ export function useVideoLoop(pauseMs = 8000, initialDelayMs = 2000) {
       disposed = true;
       video.removeEventListener("ended", onEnded);
       document.removeEventListener("visibilitychange", onVisibilityChange);
-      clearTimeout(timeout);
-      clearTimeout(initialTimeout);
+      clearScheduledPlay();
     };
   });
 

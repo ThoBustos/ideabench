@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+import Image from "next/image";
 import {
   LazyMotion,
   domAnimation,
@@ -31,9 +32,9 @@ type Idea = {
 };
 
 const IDEAS: Idea[] = [
-  { id: 1, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.png",  video: "/assets/ideas/thomasbustos.mp4",  href: "https://thomasbustos.com",              github: "ThoBustos/thomasbustosv2", x: 8,  y: 21, rotate: -3   },
-  { id: 2, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.png",  video: "/assets/ideas/ainativeclub.mp4",  href: "https://www.ainativeclub.com/",         github: "ThoBustos/ainativeclub",   x: 39, y: 25, rotate: 2    },
-  { id: 3, title: "LearnRep",         image: "/assets/ideas/learnrep.png",      video: "/assets/ideas/learnrep.mp4",      href: "https://learnrep.ideabench.ai",         github: "ThoBustos/learnrep",       x: 67, y: 20, rotate: -1.5 },
+  { id: 1, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.webp", video: "/assets/ideas/thomasbustos.mp4",  href: "https://thomasbustos.com",              github: "ThoBustos/thomasbustosv2", x: 8,  y: 21, rotate: -3   },
+  { id: 2, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.webp", video: "/assets/ideas/ainativeclub.mp4",  href: "https://www.ainativeclub.com/",         github: "ThoBustos/ainativeclub",   x: 39, y: 25, rotate: 2    },
+  { id: 3, title: "LearnRep",         image: "/assets/ideas/learnrep.webp",     video: "/assets/ideas/learnrep.mp4",      href: "https://learnrep.ideabench.ai",         github: "ThoBustos/learnrep",       x: 67, y: 20, rotate: -1.5 },
 ];
 
 function StarBadge({ count }: { count: number | undefined }) {
@@ -104,14 +105,14 @@ function DesktopCard({
               boxShadow: "0 8px 32px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1)",
             }}
           >
-            <img
+            <Image
               src={idea.image}
               alt={idea.title}
+              fill
               loading="lazy"
-              width={320}
-              height={440}
               className="absolute inset-0 w-full h-full object-cover"
               draggable={false}
+              sizes="(min-width: 768px) 22vw, 79vw"
             />
             {idea.video && (
               <video
@@ -190,14 +191,14 @@ function MobileCard({
             boxShadow: "0 12px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)",
           }}
         >
-          <img
+          <Image
             src={idea.image}
             alt={idea.title}
+            fill
             loading="lazy"
-            width={320}
-            height={440}
             className="absolute inset-0 w-full h-full object-cover"
             draggable={false}
+            sizes="79vw"
           />
           {idea.video && (
             <video
@@ -286,9 +287,13 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
 
           {/* ── Logo ── */}
           <div className="absolute inset-x-0 z-[5] flex justify-center top-0 md:top-[4%]">
-            <img
+            <Image
               src="/assets/logos/logo-c.svg"
               alt="Ideabench"
+              width={320}
+              height={183}
+              priority
+              unoptimized
               style={{ width: "clamp(200px, 88vw, 320px)", height: "auto", filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.28)) drop-shadow(0 2px 4px rgba(0,0,0,0.18))" }}
             />
           </div>
