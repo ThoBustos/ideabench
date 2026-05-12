@@ -19,6 +19,69 @@ import Magnet from "@/components/ui/magnet";
 const SERIF = "var(--font-instrument-serif), Georgia, serif";
 const SANS  = "var(--font-geist-sans), system-ui, sans-serif";
 
+const BENCH: string[] = [
+  "coding + design problem trainer",
+  "writing coach that posts to your socials",
+  "email cleaner, filter and triage",
+  "brand direction generator",
+];
+
+function FoldedCornerSticky() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div
+      className="absolute bottom-0 right-0 z-[5]"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+      onClick={() => setOpen((v) => !v)}
+    >
+      <m.div
+        animate={open ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+        transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute bottom-full right-0 mb-0.5"
+        style={{
+          background: "rgba(18,12,32,0.72)",
+          backdropFilter: "blur(14px)",
+          borderRadius: "10px 10px 0 10px",
+          border: "1px solid rgba(255,255,255,0.08)",
+          padding: "10px 14px 10px 10px",
+          width: 210,
+          pointerEvents: "none",
+        }}
+      >
+        <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+          {BENCH.map((idea) => (
+            <li
+              key={idea}
+              style={{
+                fontFamily: SANS,
+                fontSize: "0.6563rem",
+                color: "rgba(245,240,255,0.42)",
+                lineHeight: 1.6,
+                paddingLeft: "0.85rem",
+                position: "relative",
+              }}
+            >
+              <span style={{ position: "absolute", left: 0, color: "rgba(245,240,255,0.2)" }}>·</span>
+              {idea}
+            </li>
+          ))}
+        </ul>
+      </m.div>
+
+      <svg
+        width="32"
+        height="32"
+        viewBox="0 0 32 32"
+        style={{ display: "block", cursor: "default" }}
+      >
+        <polygon points="0,32 32,32 32,0" fill="rgba(245,240,255,0.07)" />
+        <polyline points="0,32 32,32 32,0" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+      </svg>
+    </div>
+  );
+}
+
 const FRAUNCES = "var(--font-fraunces), Georgia, serif";
 
 type Idea = {
@@ -349,6 +412,9 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
               isTouch={isTouch}
             />
           ))}
+
+          {/* ── Folded corner: on-the-bench ideas ── */}
+          <FoldedCornerSticky />
 
           {/* ── Footer ── */}
           <div
