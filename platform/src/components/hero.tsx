@@ -28,57 +28,172 @@ const BENCH: string[] = [
 
 function FoldedCornerSticky() {
   const [open, setOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const show = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    setOpen(true);
+  };
+
+  const hideSoon = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setOpen(false), 120);
+  };
+
+  const toggle = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    setOpen((v) => !v);
+  };
+
+  const showFromPointer = (event: React.PointerEvent) => {
+    if (event.pointerType !== "touch") show();
+  };
+
+  const hideFromPointer = (event: React.PointerEvent) => {
+    if (event.pointerType === "mouse") hideSoon();
+  };
+
   return (
     <div
-      className="absolute bottom-0 right-0 z-[5]"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
-      onClick={() => setOpen((v) => !v)}
+      className="absolute bottom-0 left-0 z-[6] h-[230px] w-[330px] max-w-[100vw] pointer-events-none"
+      aria-live="polite"
     >
       <m.div
-        animate={open ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
-        transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute bottom-full right-0 mb-0.5"
+        onPointerEnter={showFromPointer}
+        onPointerLeave={hideFromPointer}
+        animate={
+          open
+            ? { opacity: 1, scale: 1, rotate: 1.1, x: 0, y: 0 }
+            : { opacity: 0, scale: 0.92, rotate: -3, x: -22, y: 18 }
+        }
+        transition={{ type: "spring", stiffness: 360, damping: 30, mass: 0.7 }}
+        className="absolute bottom-9 left-8 origin-bottom-left pointer-events-auto"
         style={{
-          background: "rgba(18,12,32,0.72)",
-          backdropFilter: "blur(14px)",
-          borderRadius: "10px 10px 0 10px",
-          border: "1px solid rgba(255,255,255,0.08)",
-          padding: "10px 14px 10px 10px",
-          width: 230,
-          whiteSpace: "nowrap",
-          pointerEvents: "none",
+          width: "min(78vw, 300px)",
+          padding: "16px 18px 17px",
+          borderRadius: "13px 13px 13px 5px",
+          border: "1px solid rgba(255, 255, 255, 0.58)",
+          background:
+            "linear-gradient(145deg, rgba(255, 254, 240, 0.92) 0%, rgba(248, 249, 232, 0.82) 58%, rgba(222, 243, 240, 0.78) 100%)",
+          backdropFilter: "blur(10px) saturate(1.08)",
+          boxShadow:
+            "0 18px 44px rgba(21, 55, 71, 0.22), 0 1px 0 rgba(255,255,255,0.86) inset",
+          color: "rgba(29, 49, 57, 0.86)",
+          pointerEvents: open ? "auto" : "none",
         }}
       >
+        <span
+          aria-hidden="true"
+          className="absolute inset-x-3 top-0 h-px"
+          style={{ background: "rgba(255, 255, 255, 0.8)" }}
+        />
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <p
+            style={{
+              margin: 0,
+              fontFamily: FRAUNCES,
+              fontSize: "1rem",
+              fontWeight: 300,
+              color: "rgba(28, 55, 63, 0.78)",
+              lineHeight: 1,
+            }}
+          >
+            on the bench
+          </p>
+          <span
+            aria-hidden="true"
+            style={{
+              height: 6,
+              width: 6,
+              borderRadius: 999,
+              background: "rgba(232, 151, 71, 0.62)",
+              boxShadow: "0 0 0 7px rgba(232,151,71,0.08)",
+              flex: "0 0 auto",
+            }}
+          />
+        </div>
         <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
-          {BENCH.map((idea) => (
-            <li
+          {BENCH.map((idea, index) => (
+            <m.li
               key={idea}
+              animate={open ? { opacity: 1, x: 0 } : { opacity: 0, x: 8 }}
+              transition={{
+                duration: 0.2,
+                delay: open ? 0.04 + index * 0.035 : 0,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               style={{
                 fontFamily: SANS,
-                fontSize: "0.6563rem",
-                color: "rgba(245,240,255,0.42)",
-                lineHeight: 1.6,
-                paddingLeft: "0.85rem",
+                fontSize: "0.7rem",
+                color: "rgba(25, 45, 54, 0.66)",
+                lineHeight: 1.58,
+                paddingLeft: "0.95rem",
                 position: "relative",
+                letterSpacing: 0,
               }}
             >
-              <span style={{ position: "absolute", left: 0, color: "rgba(245,240,255,0.2)" }}>·</span>
+              <span
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: "0.5em",
+                  height: 3,
+                  width: 3,
+                  borderRadius: 999,
+                  background: "rgba(83, 142, 145, 0.46)",
+                }}
+              />
               {idea}
-            </li>
+            </m.li>
           ))}
         </ul>
       </m.div>
 
-      <svg
-        width="32"
-        height="32"
-        viewBox="0 0 32 32"
-        style={{ display: "block", cursor: "default" }}
+      <button
+        type="button"
+        aria-label={open ? "Hide ideabench notes" : "Show ideabench notes"}
+        aria-expanded={open}
+        onPointerEnter={showFromPointer}
+        onPointerLeave={hideFromPointer}
+        onFocus={(event) => {
+          if (event.currentTarget.matches(":focus-visible")) show();
+        }}
+        onClick={(event) => {
+          event.preventDefault();
+          toggle();
+        }}
+        className="absolute bottom-0 left-0 h-16 w-16 cursor-default border-0 bg-transparent p-0 pointer-events-auto focus-visible:outline-none"
       >
-        <polygon points="0,32 32,32 32,0" fill="rgba(245,240,255,0.14)" />
-        <polyline points="0,32 32,32 32,0" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1" />
-      </svg>
+        <m.span
+          aria-hidden="true"
+          animate={open ? { width: 68, height: 68 } : { width: 42, height: 42 }}
+          transition={{ type: "spring", stiffness: 420, damping: 32 }}
+          className="absolute bottom-0 left-0 block"
+          style={{
+            clipPath: "polygon(0 0, 0 100%, 100% 100%)",
+            background:
+              "linear-gradient(225deg, rgba(255,255,255,0.18) 0%, rgba(255, 251, 231, 0.88) 48%, rgba(145, 195, 201, 0.52) 100%)",
+            filter: "drop-shadow(8px -8px 18px rgba(35, 75, 89, 0.18))",
+          }}
+        />
+        <m.span
+          aria-hidden="true"
+          animate={open ? { opacity: 1, scale: 1, x: 3, y: -3 } : { opacity: 0.68, scale: 0.84, x: 0, y: 0 }}
+          transition={{ type: "spring", stiffness: 420, damping: 32 }}
+          className="absolute bottom-0 left-0 block h-16 w-16"
+          style={{
+            background:
+              "linear-gradient(45deg, transparent 0 48%, rgba(54, 93, 105, 0.24) 49%, rgba(255,255,255,0.48) 51%, transparent 53%)",
+          }}
+        />
+      </button>
     </div>
   );
 }
