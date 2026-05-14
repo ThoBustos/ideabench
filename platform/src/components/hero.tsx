@@ -21,7 +21,7 @@ const SANS  = "var(--font-geist-sans), system-ui, sans-serif";
 
 const BENCH: string[] = [
   "coding + design problem trainer",
-  "writing coach that posts to your socials",
+  "writing coach that posts to socials",
   "email cleaner, filter and triage",
   "brand direction generator",
 ];
@@ -45,7 +45,8 @@ function FoldedCornerSticky() {
           borderRadius: "10px 10px 0 10px",
           border: "1px solid rgba(255,255,255,0.08)",
           padding: "10px 14px 10px 10px",
-          width: 210,
+          width: 230,
+          whiteSpace: "nowrap",
           pointerEvents: "none",
         }}
       >
@@ -75,8 +76,8 @@ function FoldedCornerSticky() {
         viewBox="0 0 32 32"
         style={{ display: "block", cursor: "default" }}
       >
-        <polygon points="0,32 32,32 32,0" fill="rgba(245,240,255,0.07)" />
-        <polyline points="0,32 32,32 32,0" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+        <polygon points="0,32 32,32 32,0" fill="rgba(245,240,255,0.14)" />
+        <polyline points="0,32 32,32 32,0" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1" />
       </svg>
     </div>
   );
