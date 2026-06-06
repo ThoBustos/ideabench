@@ -216,6 +216,7 @@ const IDEAS: Idea[] = [
   { id: 1, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.webp", video: "/assets/ideas/thomasbustos.mp4",  href: "https://thomasbustos.com",              github: "ThoBustos/thomasbustosv2", x: 8,  y: 21, rotate: -3   },
   { id: 2, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.webp", video: "/assets/ideas/ainativeclub.mp4",  href: "https://www.ainativeclub.com/",         github: "ThoBustos/ainativeclub",   x: 39, y: 25, rotate: 2    },
   { id: 3, title: "LearnRep",         image: "/assets/ideas/learnrep.webp",     video: "/assets/ideas/learnrep.mp4",      href: "https://learnrep.ideabench.ai",         github: "ThoBustos/learnrep",       x: 67, y: 20, rotate: -1.5 },
+  { id: 4, title: "small.design",      image: "/assets/ideas/smalldesign.png",   video: "/assets/ideas/smalldesign.mp4",   href: "https://small.design",                 github: "ThoBustos/smalldesign",    x: 74, y: 43, rotate: 3    },
 ];
 
 function StarBadge({ count }: { count: number | undefined }) {
