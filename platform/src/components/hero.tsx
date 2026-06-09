@@ -2,22 +2,21 @@
 
 import React, { useState, useRef } from "react";
 import Image from "next/image";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import {
   LazyMotion,
   domAnimation,
   m,
   MotionConfig,
 } from "motion/react";
-import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
 import { useMountEffect } from "@/hooks/use-mount-effect";
 import { useVideoLoop } from "@/hooks/use-video-loop";
 import { useCenterVideoPlay } from "@/hooks/use-center-video-play";
-import { useEmblaSelected } from "@/hooks/use-embla-selected";
 import Magnet from "@/components/ui/magnet";
 
-const SERIF = "var(--font-instrument-serif), Georgia, serif";
 const SANS  = "var(--font-geist-sans), system-ui, sans-serif";
+const DISPLAY = "var(--font-bricolage), var(--font-geist-sans), system-ui, sans-serif";
 
 const BENCH: string[] = [
   "coding + design problem trainer",
@@ -29,6 +28,10 @@ const BENCH: string[] = [
 function FoldedCornerSticky() {
   const [open, setOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useMountEffect(() => () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+  });
 
   const show = () => {
     if (closeTimer.current) {
@@ -61,7 +64,7 @@ function FoldedCornerSticky() {
 
   return (
     <div
-      className="absolute bottom-0 left-0 z-[6] h-[230px] w-[330px] max-w-[100vw] pointer-events-none"
+      className="absolute bottom-0 left-0 z-[6] h-[238px] w-[330px] max-w-[100vw] pointer-events-none"
       aria-live="polite"
     >
       <m.div
@@ -69,54 +72,38 @@ function FoldedCornerSticky() {
         onPointerLeave={hideFromPointer}
         animate={
           open
-            ? { opacity: 1, scale: 1, rotate: 1.1, x: 0, y: 0 }
-            : { opacity: 0, scale: 0.92, rotate: -3, x: -22, y: 18 }
+            ? { opacity: 1, scale: 1, x: 0, y: 0 }
+            : { opacity: 0, scale: 0.98, x: 0, y: 8 }
         }
-        transition={{ type: "spring", stiffness: 360, damping: 30, mass: 0.7 }}
-        className="absolute bottom-9 left-8 origin-bottom-left pointer-events-auto"
+        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute bottom-12 left-5 origin-bottom-left pointer-events-auto"
         style={{
-          width: "min(78vw, 300px)",
-          padding: "16px 18px 17px",
-          borderRadius: "13px 13px 13px 5px",
-          border: "1px solid rgba(255, 255, 255, 0.58)",
-          background:
-            "linear-gradient(145deg, rgba(255, 254, 240, 0.92) 0%, rgba(248, 249, 232, 0.82) 58%, rgba(222, 243, 240, 0.78) 100%)",
-          backdropFilter: "blur(10px) saturate(1.08)",
-          boxShadow:
-            "0 18px 44px rgba(21, 55, 71, 0.22), 0 1px 0 rgba(255,255,255,0.86) inset",
-          color: "rgba(29, 49, 57, 0.86)",
+          width: "min(78vw, 270px)",
+          padding: "12px 0 0",
+          borderTop: "1px solid rgba(29, 55, 60, 0.22)",
+          background: "transparent",
+          color: "rgba(23, 45, 50, 0.74)",
           pointerEvents: open ? "auto" : "none",
         }}
       >
-        <span
-          aria-hidden="true"
-          className="absolute inset-x-3 top-0 h-px"
-          style={{ background: "rgba(255, 255, 255, 0.8)" }}
-        />
-        <div className="mb-2 flex items-center justify-between gap-3">
+        <div className="mb-2 flex items-baseline justify-between gap-3">
           <p
             style={{
               margin: 0,
-              fontFamily: FRAUNCES,
-              fontSize: "1rem",
-              fontWeight: 300,
-              color: "rgba(28, 55, 63, 0.78)",
+              fontFamily: SANS,
+              fontSize: "0.58rem",
+              fontWeight: 600,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+              color: "rgba(22, 48, 54, 0.64)",
               lineHeight: 1,
             }}
           >
             on the bench
           </p>
-          <span
-            aria-hidden="true"
-            style={{
-              height: 6,
-              width: 6,
-              borderRadius: 999,
-              background: "rgba(232, 151, 71, 0.62)",
-              boxShadow: "0 0 0 7px rgba(232,151,71,0.08)",
-              flex: "0 0 auto",
-            }}
-          />
+          <span style={{ fontFamily: SANS, fontSize: "0.58rem", color: "rgba(22, 48, 54, 0.42)" }}>
+            {BENCH.length}
+          </span>
         </div>
         <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
           {BENCH.map((idea, index) => (
@@ -130,26 +117,14 @@ function FoldedCornerSticky() {
               }}
               style={{
                 fontFamily: SANS,
-                fontSize: "0.7rem",
-                color: "rgba(25, 45, 54, 0.66)",
-                lineHeight: 1.58,
-                paddingLeft: "0.95rem",
+                fontSize: "0.72rem",
+                color: "rgba(23, 45, 50, 0.68)",
+                lineHeight: 1.55,
+                paddingLeft: 0,
                 position: "relative",
                 letterSpacing: 0,
               }}
             >
-              <span
-                aria-hidden="true"
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: "0.5em",
-                  height: 3,
-                  width: 3,
-                  borderRadius: 999,
-                  background: "rgba(83, 142, 145, 0.46)",
-                }}
-              />
               {idea}
             </m.li>
           ))}
@@ -165,40 +140,29 @@ function FoldedCornerSticky() {
         onFocus={(event) => {
           if (event.currentTarget.matches(":focus-visible")) show();
         }}
-        onClick={(event) => {
-          event.preventDefault();
-          toggle();
-        }}
-        className="absolute bottom-0 left-0 h-16 w-16 cursor-default border-0 bg-transparent p-0 pointer-events-auto focus-visible:outline-none"
+        onBlur={hideSoon}
+        onClick={toggle}
+        className="absolute bottom-5 left-5 h-5 cursor-default border-0 bg-transparent p-0 pointer-events-auto focus-visible:outline-none"
       >
         <m.span
-          aria-hidden="true"
-          animate={open ? { width: 68, height: 68 } : { width: 42, height: 42 }}
-          transition={{ type: "spring", stiffness: 420, damping: 32 }}
-          className="absolute bottom-0 left-0 block"
+          animate={open ? { opacity: 0.95 } : { opacity: 0.62 }}
+          transition={{ duration: 0.16 }}
+          className="block"
           style={{
-            clipPath: "polygon(0 0, 0 100%, 100% 100%)",
-            background:
-              "linear-gradient(225deg, rgba(255,255,255,0.18) 0%, rgba(255, 251, 231, 0.88) 48%, rgba(145, 195, 201, 0.52) 100%)",
-            filter: "drop-shadow(8px -8px 18px rgba(35, 75, 89, 0.18))",
+            color: "rgba(20, 43, 49, 0.78)",
+            fontFamily: SANS,
+            fontSize: "0.58rem",
+            fontWeight: 600,
+            letterSpacing: "0.16em",
+            textTransform: "uppercase",
           }}
-        />
-        <m.span
-          aria-hidden="true"
-          animate={open ? { opacity: 1, scale: 1, x: 3, y: -3 } : { opacity: 0.68, scale: 0.84, x: 0, y: 0 }}
-          transition={{ type: "spring", stiffness: 420, damping: 32 }}
-          className="absolute bottom-0 left-0 block h-16 w-16"
-          style={{
-            background:
-              "linear-gradient(45deg, transparent 0 48%, rgba(54, 93, 105, 0.24) 49%, rgba(255,255,255,0.48) 51%, transparent 53%)",
-          }}
-        />
+        >
+          bench
+        </m.span>
       </button>
     </div>
   );
 }
-
-const FRAUNCES = "var(--font-fraunces), Georgia, serif";
 
 type Idea = {
   id: number;
@@ -213,9 +177,10 @@ type Idea = {
 };
 
 const IDEAS: Idea[] = [
-  { id: 1, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.webp", video: "/assets/ideas/thomasbustos.mp4",  href: "https://thomasbustos.com",              github: "ThoBustos/thomasbustosv2", x: 8,  y: 21, rotate: -3   },
-  { id: 2, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.webp", video: "/assets/ideas/ainativeclub.mp4",  href: "https://www.ainativeclub.com/",         github: "ThoBustos/ainativeclub",   x: 39, y: 25, rotate: 2    },
-  { id: 3, title: "LearnRep",         image: "/assets/ideas/learnrep.webp",     video: "/assets/ideas/learnrep.mp4",      href: "https://learnrep.ideabench.ai",         github: "ThoBustos/learnrep",       x: 67, y: 20, rotate: -1.5 },
+  { id: 1, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.webp", video: "/assets/ideas/thomasbustos.mp4",  href: "https://thomasbustos.com",              github: "ThoBustos/thomasbustosv2", x: 7,  y: 25, rotate: -4   },
+  { id: 2, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.webp", video: "/assets/ideas/ainativeclub.mp4",  href: "https://www.ainativeclub.com/",         github: "ThoBustos/ainativeclub",   x: 31, y: 31, rotate: 1.5  },
+  { id: 3, title: "LearnRep",         image: "/assets/ideas/learnrep.webp",     video: "/assets/ideas/learnrep.mp4",      href: "https://learnrep.ideabench.ai",         github: "ThoBustos/learnrep",       x: 58, y: 24, rotate: -1.5 },
+  { id: 4, title: "small.design",      image: "/assets/ideas/smalldesign.png",   video: "/assets/ideas/smalldesign.mp4",   href: "https://small.design",                 github: "ThoBustos/smalldesign",    x: 78, y: 33, rotate: 3.5  },
 ];
 
 function StarBadge({ count }: { count: number | undefined }) {
@@ -255,12 +220,44 @@ function DesktopCard({
     v.play().then(() => setVideoVisible(true)).catch(() => {});
   };
 
-  const handleMouseLeave = () => {
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (isTouch) return;
+    const card = event.currentTarget.querySelector<HTMLElement>(".idea-card-face");
+    if (!card) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const px = (event.clientX - rect.left) / rect.width - 0.5;
+    const py = (event.clientY - rect.top) / rect.height - 0.5;
+
+    gsap.to(card, {
+      rotateY: px * 9,
+      rotateX: py * -8,
+      y: -10,
+      scale: 1.045,
+      duration: 0.45,
+      ease: "power3.out",
+      overwrite: "auto",
+    });
+  };
+
+  const handleMouseLeave = (event: React.MouseEvent<HTMLDivElement>) => {
     const v = videoRef.current;
     if (!v) return;
     v.pause();
     v.currentTime = 0;
     setVideoVisible(false);
+
+    const card = event.currentTarget.querySelector<HTMLElement>(".idea-card-face");
+    if (card) {
+      gsap.to(card, {
+        rotateX: 0,
+        rotateY: 0,
+        y: 0,
+        scale: 1,
+        duration: 0.7,
+        ease: "elastic.out(1, 0.55)",
+        overwrite: "auto",
+      });
+    }
   };
 
   return (
@@ -268,24 +265,40 @@ function DesktopCard({
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
-      className="hidden md:block absolute z-[3]"
+      className="sky-card-shell hidden md:block absolute z-[3]"
+      data-float={idea.id}
       style={{ left: `${idea.x}%`, top: `${idea.y}%` }}
       onMouseEnter={handleMouseEnter}
+      onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       <Magnet padding={50} magnetStrength={6} disabled={isTouch}>
-        <a href={idea.href} target="_blank" rel="noopener noreferrer" className="block group">
+        <a href={idea.href} target="_blank" rel="noopener noreferrer" className="block group" style={{ perspective: 900 }}>
           <div
-            className="relative overflow-hidden"
+            className="idea-card-face relative overflow-hidden"
             style={{
               width:  "clamp(165px, 16.5vw, 240px)",
               height: "clamp(225px, 22.5vw, 330px)",
-              borderRadius: 16,
-              border: "1px solid rgba(255,255,255,0.3)",
+              borderRadius: 8,
+              border: "1px solid rgba(18, 42, 54, 0.18)",
+              background:
+                "linear-gradient(145deg, rgba(255,255,246,0.42), rgba(91,146,152,0.16))",
               transform: `rotate(${idea.rotate}deg)`,
-              boxShadow: "0 8px 32px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1)",
+              transformStyle: "preserve-3d",
+              willChange: "transform",
+              boxShadow:
+                "0 34px 76px rgba(21, 58, 74, 0.25), 0 10px 22px rgba(18, 36, 48, 0.15)",
             }}
           >
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 z-[1] pointer-events-none"
+              style={{
+                background:
+                  "linear-gradient(120deg, rgba(255,255,255,0.32), transparent 26%, transparent 72%, rgba(255,255,255,0.18))",
+                mixBlendMode: "screen",
+              }}
+            />
             <Image
               src={idea.image}
               alt={idea.title}
@@ -309,7 +322,7 @@ function DesktopCard({
             )}
             <div
               className="absolute inset-0"
-              style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.15) 35%, transparent 50%)" }}
+              style={{ background: "linear-gradient(to top, rgba(9,15,20,0.72) 0%, rgba(9,15,20,0.18) 38%, transparent 58%)" }}
             />
             <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <StarBadge count={stars[idea.github]} />
@@ -317,18 +330,18 @@ function DesktopCard({
             <div className="absolute bottom-0 left-0 right-0 p-4">
               <span
                 className="mb-1.5 block text-white/0 group-hover:text-white/60 transition-colors duration-200"
-                style={{ fontFamily: SANS, fontSize: "clamp(0.6875rem, 0.8vw, 0.8125rem)" }}
+                style={{ fontFamily: SANS, fontSize: "clamp(0.6875rem, 0.8vw, 0.8125rem)", letterSpacing: "0.08em", textTransform: "uppercase" }}
               >
                 Explore
               </span>
               <h3
                 style={{
-                  fontFamily: SERIF,
-                  fontSize:   "clamp(1rem, 1.2vw, 1.25rem)",
-                  fontWeight: 400,
+                  fontFamily: DISPLAY,
+                  fontSize:   "clamp(1rem, 1.12vw, 1.18rem)",
+                  fontWeight: 500,
                   color:      "#fff",
                   textShadow: "0 1px 4px rgba(0,0,0,0.4)",
-                  lineHeight: 1.2,
+                  lineHeight: 1.08,
                 }}
               >
                 {idea.title}
@@ -341,35 +354,49 @@ function DesktopCard({
   );
 }
 
-function MobileCard({
+function MobileOrbitCard({
   idea,
   stars,
   isCenter,
+  index,
+  setCardRef,
+  onSelect,
 }: {
   idea: Idea;
   stars: Record<string, number>;
   isCenter: boolean;
+  index: number;
+  setCardRef: (index: number, node: HTMLDivElement | null) => void;
+  onSelect: () => void;
 }) {
   const { videoRef, videoVisible } = useCenterVideoPlay(isCenter);
 
   return (
     <div
-      className="relative flex-none h-full"
-      style={{ paddingLeft: "7vw", width: "79vw" }}
+      ref={(node) => setCardRef(index, node)}
+      className="mobile-orbit-card absolute left-1/2 top-0 h-full"
+      style={{ width: "min(72vw, 330px)", willChange: "transform, opacity" }}
     >
       <a
         href={idea.href}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={(event) => {
+          if (!isCenter) {
+            event.preventDefault();
+            onSelect();
+          }
+        }}
         className="group block h-full focus-visible:outline-none"
         draggable={false}
+        aria-current={isCenter ? "true" : undefined}
       >
         <div
           className="relative h-full w-full overflow-hidden"
           style={{
-            borderRadius: 16,
-            border: "1px solid rgba(255,255,255,0.3)",
-            boxShadow: "0 12px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)",
+            borderRadius: 14,
+            border: "1px solid rgba(21, 47, 54, 0.14)",
+            boxShadow: "none",
           }}
         >
           <Image
@@ -379,7 +406,7 @@ function MobileCard({
             loading="lazy"
             className="absolute inset-0 w-full h-full object-cover"
             draggable={false}
-            sizes="79vw"
+            sizes="72vw"
           />
           {idea.video && (
             <video
@@ -400,12 +427,12 @@ function MobileCard({
           />
           <div className="absolute bottom-0 left-0 right-0 p-4">
             <h3 style={{
-              fontFamily: SERIF,
+              fontFamily: DISPLAY,
               fontSize:   "1.15rem",
-              fontWeight: 400,
+              fontWeight: 550,
               color:      "#fff",
               textShadow: "0 1px 4px rgba(0,0,0,0.5)",
-              lineHeight: 1.2,
+              lineHeight: 1.08,
             }}>
               {idea.title}
             </h3>
@@ -425,25 +452,161 @@ function MobileCard({
   );
 }
 
+function MobileOrbit({
+  ideas,
+  stars,
+}: {
+  ideas: Idea[];
+  stars: Record<string, number>;
+}) {
+  const [active, setActive] = useState(0);
+  const scopeRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const touchStartX = useRef<number | null>(null);
+
+  const setCardRef = (index: number, node: HTMLDivElement | null) => {
+    cardRefs.current[index] = node;
+  };
+
+  const select = (index: number) => {
+    setActive((index + ideas.length) % ideas.length);
+  };
+
+  useGSAP(
+    () => {
+      const positions = [
+        { x: "-50%", y: 0, scale: 1, rotate: 0, opacity: 1, zIndex: 4, filter: "blur(0px)" },
+        { x: "18%", y: 26, scale: 0.72, rotate: 7, opacity: 0.72, zIndex: 3, filter: "blur(0px)" },
+        { x: "-50%", y: -18, scale: 0.58, rotate: 0, opacity: 0, zIndex: 1, filter: "blur(2px)" },
+        { x: "-118%", y: 26, scale: 0.72, rotate: -7, opacity: 0.72, zIndex: 3, filter: "blur(0px)" },
+      ];
+
+      cardRefs.current.forEach((card, index) => {
+        if (!card) return;
+        const offset = (index - active + ideas.length) % ideas.length;
+        const position = positions[offset] ?? positions[2];
+        gsap.to(card, {
+          ...position,
+          duration: 0.68,
+          ease: "expo.out",
+          overwrite: true,
+        });
+      });
+    },
+    { scope: scopeRef, dependencies: [active, ideas.length] }
+  );
+
+  return (
+    <div
+      ref={scopeRef}
+      className="md:hidden absolute inset-x-0 z-[3] overflow-hidden"
+      style={{ top: "23%", height: "38vh", perspective: 1000, touchAction: "pan-y" }}
+      onTouchStart={(event) => {
+        touchStartX.current = event.touches[0]?.clientX ?? null;
+      }}
+      onTouchEnd={(event) => {
+        if (touchStartX.current === null) return;
+        const endX = event.changedTouches[0]?.clientX ?? touchStartX.current;
+        const delta = endX - touchStartX.current;
+        touchStartX.current = null;
+        if (Math.abs(delta) < 34) return;
+        select(active + (delta < 0 ? 1 : -1));
+      }}
+    >
+      {ideas.map((idea, index) => (
+        <MobileOrbitCard
+          key={idea.id}
+          idea={idea}
+          stars={stars}
+          isCenter={active === index}
+          index={index}
+          setCardRef={setCardRef}
+          onSelect={() => select(index)}
+        />
+      ))}
+      <div
+        className="absolute bottom-1 left-0 right-0 flex justify-center gap-1.5"
+        aria-hidden="true"
+      >
+        {ideas.map((idea, index) => (
+          <span
+            key={idea.id}
+            style={{
+              width: active === index ? 16 : 5,
+              height: 5,
+              borderRadius: 999,
+              background: active === index ? "rgba(22, 55, 63, 0.62)" : "rgba(22, 55, 63, 0.24)",
+              transition: "width 0.25s ease, background 0.25s ease",
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Hero({ stars = {} }: { stars?: Record<string, number> }) {
   const { videoRef, videoVisible } = useVideoLoop(8000);
   const [isTouch, setIsTouch] = useState(false);
+  const scopeRef = useRef<HTMLDivElement>(null);
 
   useMountEffect(() => {
     setIsTouch("ontouchstart" in window || navigator.maxTouchPoints > 0);
   });
 
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: "center", skipSnaps: false, dragFree: false },
-    [Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true })]
-  );
+  useGSAP(
+    () => {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      gsap.set(".brand-char", { yPercent: 92, opacity: 0, rotateX: -45 });
+      gsap.set(".brand-subtitle", { opacity: 0, y: 8 });
+      gsap.set(".sky-card-shell", { opacity: 0, y: 44, scale: 0.92, rotate: -3 });
 
-  const centeredIndex = useEmblaSelected(emblaApi);
+      const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
+      intro
+        .to(".brand-char", {
+          yPercent: 0,
+          opacity: 1,
+          rotateX: 0,
+          duration: 0.85,
+          stagger: 0.035,
+        })
+        .to(".brand-subtitle", { opacity: 1, y: 0, duration: 0.7 }, "-=0.45")
+        .to(
+          ".sky-card-shell",
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            rotate: 0,
+            duration: 0.72,
+            stagger: 0.12,
+          },
+          "-=0.2"
+        );
+
+      if (!reducedMotion) {
+        gsap.utils.toArray<HTMLElement>(".sky-card-shell").forEach((card, index) => {
+          gsap.to(card, {
+            y: index % 2 === 0 ? -15 : 13,
+            x: index === 1 ? 8 : -5,
+            rotate: index % 2 === 0 ? 1.4 : -1.1,
+            duration: 4.8 + index * 0.65,
+            ease: "sine.inOut",
+            repeat: -1,
+            yoyo: true,
+            delay: 1 + index * 0.3,
+          });
+        });
+      }
+    },
+    { scope: scopeRef }
+  );
 
   return (
     <MotionConfig reducedMotion="user">
       <LazyMotion features={domAnimation}>
         <div
+          ref={scopeRef}
           className="relative h-dvh overflow-hidden"
           style={{
             backgroundImage: "url('/assets/hero-bg.webp'), url('/assets/hero-bg.png')",
@@ -460,7 +623,12 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
             ref={videoRef}
             muted playsInline preload="metadata"
             className="absolute inset-0 z-0 h-full w-full object-cover"
-            style={{ opacity: videoVisible ? 1 : 0, transition: "opacity 1.5s ease" }}
+            style={{
+              opacity: videoVisible ? 1 : 0,
+              transition: "opacity 1.5s ease",
+              filter: "grayscale(1) contrast(1.12) brightness(0.9)",
+              mixBlendMode: "luminosity",
+            }}
           >
             <source src="/assets/video/hero-loop.webm" type="video/webm" />
             <source src="/assets/video/hero-loop.mp4"  type="video/mp4"  />
@@ -470,53 +638,46 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
           <div className="absolute inset-x-0 z-[5] flex flex-col items-center top-0 md:top-[4%] pt-3 md:pt-0 gap-1.5">
             <h1
               style={{
-                fontFamily: FRAUNCES,
-                fontSize: "clamp(2.5rem, 10vw, 4.5rem)",
-                fontWeight: 300,
-                fontStyle: "italic",
-                letterSpacing: "-0.01em",
+                fontFamily: DISPLAY,
+                fontSize: "clamp(2.8rem, 9vw, 5.3rem)",
+                fontWeight: 600,
+                fontStyle: "normal",
+                letterSpacing: 0,
                 color: "rgba(245,240,255,0.92)",
                 lineHeight: 1,
                 userSelect: "none",
                 margin: 0,
               }}
             >
-              ideabench
+              <span className="inline-flex overflow-hidden pb-1" aria-label="ideabench">
+                {"ideabench".split("").map((char, index) => (
+                  <span key={`${char}-${index}`} className="brand-char inline-block">
+                    {char}
+                  </span>
+                ))}
+              </span>
             </h1>
             <p
+              className="brand-subtitle"
               style={{
-                fontFamily: FRAUNCES,
-                fontSize: "clamp(0.7rem, 1.3vw, 0.9rem)",
+                fontFamily: SANS,
+                fontSize: "clamp(0.62rem, 0.9vw, 0.78rem)",
                 fontStyle: "normal",
-                fontWeight: 300,
-                color: "rgba(245,240,255,0.52)",
+                fontWeight: 500,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "rgba(25, 64, 73, 0.72)",
                 lineHeight: 1,
                 userSelect: "none",
-                margin: 0,
+                margin: "0.35rem 0 0",
               }}
             >
               Where my ideas grow.
             </p>
           </div>
 
-          {/* ── Mobile: Embla carousel ── */}
-          <div
-            className="md:hidden absolute inset-x-0 z-[3]"
-            style={{ top: "22%", height: "38vh" }}
-          >
-            <div ref={emblaRef} className="overflow-hidden h-full">
-              <div className="flex h-full" style={{ marginLeft: "-7vw" }}>
-                {IDEAS.map((idea, i) => (
-                  <MobileCard
-                    key={idea.id}
-                    idea={idea}
-                    stars={stars}
-                    isCenter={centeredIndex === i}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* ── Mobile: GSAP orbit carousel ── */}
+          <MobileOrbit ideas={IDEAS} stars={stars} />
 
           {/* ── Desktop: scattered absolute cards ── */}
           {IDEAS.map((idea, i) => (
