@@ -68,7 +68,7 @@ function FoldedCornerSticky() {
 
   return (
     <div
-      className="absolute bottom-0 left-0 z-[6] h-[230px] w-[330px] max-w-[100vw] pointer-events-none"
+      className="absolute bottom-0 left-0 z-[6] h-[280px] w-[390px] max-w-[100vw] pointer-events-none"
       aria-live="polite"
     >
       <m.div
@@ -76,21 +76,21 @@ function FoldedCornerSticky() {
         onPointerLeave={hideFromPointer}
         animate={
           open
-            ? { opacity: 1, scale: 1, rotate: 1.1, x: 0, y: 0 }
-            : { opacity: 0, scale: 0.92, rotate: -3, x: -22, y: 18 }
+            ? { opacity: 1, scale: 1, rotate: 0, x: 0, y: 0 }
+            : { opacity: 0, scale: 0.96, rotate: 0, x: -8, y: 12 }
         }
-        transition={{ type: "spring", stiffness: 360, damping: 30, mass: 0.7 }}
-        className="absolute bottom-9 left-8 origin-bottom-left pointer-events-auto"
+        transition={{ type: "spring", stiffness: 380, damping: 34, mass: 0.75 }}
+        className="absolute bottom-[74px] left-5 origin-bottom-left pointer-events-auto"
         style={{
-          width: "min(78vw, 300px)",
-          padding: "16px 18px 17px",
-          borderRadius: "13px 13px 13px 5px",
-          border: "1px solid rgba(255, 255, 255, 0.58)",
+          width: "min(82vw, 320px)",
+          padding: "14px 16px 15px",
+          borderRadius: 8,
+          border: "1px solid rgba(35, 65, 69, 0.16)",
           background:
-            "linear-gradient(145deg, rgba(255, 254, 240, 0.92) 0%, rgba(248, 249, 232, 0.82) 58%, rgba(222, 243, 240, 0.78) 100%)",
-          backdropFilter: "blur(10px) saturate(1.08)",
+            "linear-gradient(150deg, rgba(255, 252, 235, 0.96) 0%, rgba(249, 245, 223, 0.91) 62%, rgba(231, 242, 238, 0.9) 100%)",
+          backdropFilter: "blur(14px) saturate(1.05)",
           boxShadow:
-            "0 18px 44px rgba(21, 55, 71, 0.22), 0 1px 0 rgba(255,255,255,0.86) inset",
+            "0 22px 60px rgba(16, 45, 53, 0.22), 0 1px 0 rgba(255,255,255,0.75) inset",
           color: "rgba(29, 49, 57, 0.86)",
           pointerEvents: open ? "auto" : "none",
         }}
@@ -104,10 +104,12 @@ function FoldedCornerSticky() {
           <p
             style={{
               margin: 0,
-              fontFamily: FRAUNCES,
-              fontSize: "1rem",
-              fontWeight: 300,
-              color: "rgba(28, 55, 63, 0.78)",
+              fontFamily: DISPLAY,
+              fontSize: "0.72rem",
+              fontWeight: 600,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "rgba(24, 52, 58, 0.76)",
               lineHeight: 1,
             }}
           >
@@ -119,8 +121,8 @@ function FoldedCornerSticky() {
               height: 6,
               width: 6,
               borderRadius: 999,
-              background: "rgba(232, 151, 71, 0.62)",
-              boxShadow: "0 0 0 7px rgba(232,151,71,0.08)",
+              background: "rgba(39, 101, 108, 0.58)",
+              boxShadow: "0 0 0 6px rgba(39,101,108,0.08)",
               flex: "0 0 auto",
             }}
           />
@@ -137,9 +139,9 @@ function FoldedCornerSticky() {
               }}
               style={{
                 fontFamily: SANS,
-                fontSize: "0.7rem",
-                color: "rgba(25, 45, 54, 0.66)",
-                lineHeight: 1.58,
+                fontSize: "0.72rem",
+                color: "rgba(25, 45, 54, 0.72)",
+                lineHeight: 1.62,
                 paddingLeft: "0.95rem",
                 position: "relative",
                 letterSpacing: 0,
@@ -174,36 +176,37 @@ function FoldedCornerSticky() {
         }}
         onBlur={hideSoon}
         onClick={toggle}
-        className="absolute bottom-0 left-0 h-16 w-16 cursor-default border-0 bg-transparent p-0 pointer-events-auto focus-visible:outline-none"
+        className="absolute bottom-5 left-5 h-10 w-[118px] cursor-default border-0 bg-transparent p-0 pointer-events-auto focus-visible:outline-none"
       >
         <m.span
-          aria-hidden="true"
-          animate={open ? { width: 68, height: 68 } : { width: 42, height: 42 }}
+          animate={open ? { scale: 1.02, y: -1 } : { scale: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 420, damping: 32 }}
-          className="absolute bottom-0 left-0 block"
+          className="absolute inset-0 flex items-center justify-center gap-2"
           style={{
-            clipPath: "polygon(0 0, 0 100%, 100% 100%)",
+            borderRadius: 999,
+            border: "1px solid rgba(28, 58, 64, 0.18)",
             background:
-              "linear-gradient(225deg, rgba(255,255,255,0.18) 0%, rgba(255, 251, 231, 0.88) 48%, rgba(145, 195, 201, 0.52) 100%)",
-            filter: "drop-shadow(8px -8px 18px rgba(35, 75, 89, 0.18))",
+              "linear-gradient(145deg, rgba(255, 253, 239, 0.9), rgba(220, 238, 235, 0.78))",
+            boxShadow: "0 12px 32px rgba(19, 51, 58, 0.18), 0 1px 0 rgba(255,255,255,0.75) inset",
+            color: "rgba(22, 49, 55, 0.76)",
+            fontFamily: DISPLAY,
+            fontSize: "0.7rem",
+            fontWeight: 600,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
           }}
-        />
-        <m.span
-          aria-hidden="true"
-          animate={open ? { opacity: 1, scale: 1, x: 3, y: -3 } : { opacity: 0.68, scale: 0.84, x: 0, y: 0 }}
-          transition={{ type: "spring", stiffness: 420, damping: 32 }}
-          className="absolute bottom-0 left-0 block h-16 w-16"
-          style={{
-            background:
-              "linear-gradient(45deg, transparent 0 48%, rgba(54, 93, 105, 0.24) 49%, rgba(255,255,255,0.48) 51%, transparent 53%)",
-          }}
-        />
+        >
+          <span
+            aria-hidden="true"
+            className="block h-1.5 w-1.5 rounded-full"
+            style={{ background: "rgba(42, 105, 111, 0.58)" }}
+          />
+          bench
+        </m.span>
       </button>
     </div>
   );
 }
-
-const FRAUNCES = "var(--font-fraunces), Georgia, serif";
 
 type Idea = {
   id: number;
@@ -218,10 +221,10 @@ type Idea = {
 };
 
 const IDEAS: Idea[] = [
-  { id: 1, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.webp", video: "/assets/ideas/thomasbustos.mp4",  href: "https://thomasbustos.com",              github: "ThoBustos/thomasbustosv2", x: 8,  y: 21, rotate: -3   },
-  { id: 2, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.webp", video: "/assets/ideas/ainativeclub.mp4",  href: "https://www.ainativeclub.com/",         github: "ThoBustos/ainativeclub",   x: 39, y: 25, rotate: 2    },
-  { id: 3, title: "LearnRep",         image: "/assets/ideas/learnrep.webp",     video: "/assets/ideas/learnrep.mp4",      href: "https://learnrep.ideabench.ai",         github: "ThoBustos/learnrep",       x: 67, y: 20, rotate: -1.5 },
-  { id: 4, title: "small.design",      image: "/assets/ideas/smalldesign.png",   video: "/assets/ideas/smalldesign.mp4",   href: "https://small.design",                 github: "ThoBustos/smalldesign",    x: 74, y: 43, rotate: 3    },
+  { id: 1, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.webp", video: "/assets/ideas/thomasbustos.mp4",  href: "https://thomasbustos.com",              github: "ThoBustos/thomasbustosv2", x: 7,  y: 25, rotate: -4   },
+  { id: 2, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.webp", video: "/assets/ideas/ainativeclub.mp4",  href: "https://www.ainativeclub.com/",         github: "ThoBustos/ainativeclub",   x: 31, y: 31, rotate: 1.5  },
+  { id: 3, title: "LearnRep",         image: "/assets/ideas/learnrep.webp",     video: "/assets/ideas/learnrep.mp4",      href: "https://learnrep.ideabench.ai",         github: "ThoBustos/learnrep",       x: 58, y: 24, rotate: -1.5 },
+  { id: 4, title: "small.design",      image: "/assets/ideas/smalldesign.png",   video: "/assets/ideas/smalldesign.mp4",   href: "https://small.design",                 github: "ThoBustos/smalldesign",    x: 78, y: 33, rotate: 3.5  },
 ];
 
 function StarBadge({ count }: { count: number | undefined }) {
@@ -588,7 +591,6 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
                 lineHeight: 1,
                 userSelect: "none",
                 margin: 0,
-                textShadow: "0 16px 48px rgba(38, 91, 110, 0.24)",
               }}
             >
               <span className="inline-flex overflow-hidden pb-1" aria-label="ideabench">
@@ -602,14 +604,16 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
             <p
               className="brand-subtitle"
               style={{
-                fontFamily: SERIF,
-                fontSize: "clamp(0.78rem, 1.25vw, 1rem)",
+                fontFamily: SANS,
+                fontSize: "clamp(0.62rem, 0.9vw, 0.78rem)",
                 fontStyle: "normal",
-                fontWeight: 400,
-                color: "rgba(245,240,255,0.58)",
+                fontWeight: 500,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "rgba(25, 64, 73, 0.72)",
                 lineHeight: 1,
                 userSelect: "none",
-                margin: 0,
+                margin: "0.35rem 0 0",
               }}
             >
               Where my ideas grow.
