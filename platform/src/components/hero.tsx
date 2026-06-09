@@ -68,7 +68,7 @@ function FoldedCornerSticky() {
 
   return (
     <div
-      className="absolute bottom-0 left-0 z-[6] h-[280px] w-[390px] max-w-[100vw] pointer-events-none"
+      className="absolute bottom-0 left-0 z-[6] h-[238px] w-[330px] max-w-[100vw] pointer-events-none"
       aria-live="polite"
     >
       <m.div
@@ -76,56 +76,38 @@ function FoldedCornerSticky() {
         onPointerLeave={hideFromPointer}
         animate={
           open
-            ? { opacity: 1, scale: 1, rotate: 0, x: 0, y: 0 }
-            : { opacity: 0, scale: 0.96, rotate: 0, x: -8, y: 12 }
+            ? { opacity: 1, scale: 1, x: 0, y: 0 }
+            : { opacity: 0, scale: 0.98, x: 0, y: 8 }
         }
-        transition={{ type: "spring", stiffness: 380, damping: 34, mass: 0.75 }}
-        className="absolute bottom-[74px] left-5 origin-bottom-left pointer-events-auto"
+        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute bottom-12 left-5 origin-bottom-left pointer-events-auto"
         style={{
-          width: "min(82vw, 320px)",
-          padding: "14px 16px 15px",
-          borderRadius: 8,
-          border: "1px solid rgba(35, 65, 69, 0.16)",
-          background:
-            "linear-gradient(150deg, rgba(255, 252, 235, 0.96) 0%, rgba(249, 245, 223, 0.91) 62%, rgba(231, 242, 238, 0.9) 100%)",
-          backdropFilter: "blur(14px) saturate(1.05)",
-          boxShadow:
-            "0 22px 60px rgba(16, 45, 53, 0.22), 0 1px 0 rgba(255,255,255,0.75) inset",
-          color: "rgba(29, 49, 57, 0.86)",
+          width: "min(78vw, 270px)",
+          padding: "12px 0 0",
+          borderTop: "1px solid rgba(29, 55, 60, 0.22)",
+          background: "transparent",
+          color: "rgba(23, 45, 50, 0.74)",
           pointerEvents: open ? "auto" : "none",
         }}
       >
-        <span
-          aria-hidden="true"
-          className="absolute inset-x-3 top-0 h-px"
-          style={{ background: "rgba(255, 255, 255, 0.8)" }}
-        />
-        <div className="mb-2 flex items-center justify-between gap-3">
+        <div className="mb-2 flex items-baseline justify-between gap-3">
           <p
             style={{
               margin: 0,
-              fontFamily: DISPLAY,
-              fontSize: "0.72rem",
+              fontFamily: SANS,
+              fontSize: "0.58rem",
               fontWeight: 600,
-              letterSpacing: "0.12em",
+              letterSpacing: "0.16em",
               textTransform: "uppercase",
-              color: "rgba(24, 52, 58, 0.76)",
+              color: "rgba(22, 48, 54, 0.64)",
               lineHeight: 1,
             }}
           >
             on the bench
           </p>
-          <span
-            aria-hidden="true"
-            style={{
-              height: 6,
-              width: 6,
-              borderRadius: 999,
-              background: "rgba(39, 101, 108, 0.58)",
-              boxShadow: "0 0 0 6px rgba(39,101,108,0.08)",
-              flex: "0 0 auto",
-            }}
-          />
+          <span style={{ fontFamily: SANS, fontSize: "0.58rem", color: "rgba(22, 48, 54, 0.42)" }}>
+            {BENCH.length}
+          </span>
         </div>
         <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
           {BENCH.map((idea, index) => (
@@ -140,25 +122,13 @@ function FoldedCornerSticky() {
               style={{
                 fontFamily: SANS,
                 fontSize: "0.72rem",
-                color: "rgba(25, 45, 54, 0.72)",
-                lineHeight: 1.62,
-                paddingLeft: "0.95rem",
+                color: "rgba(23, 45, 50, 0.68)",
+                lineHeight: 1.55,
+                paddingLeft: 0,
                 position: "relative",
                 letterSpacing: 0,
               }}
             >
-              <span
-                aria-hidden="true"
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: "0.5em",
-                  height: 3,
-                  width: 3,
-                  borderRadius: 999,
-                  background: "rgba(83, 142, 145, 0.46)",
-                }}
-              />
               {idea}
             </m.li>
           ))}
@@ -176,31 +146,21 @@ function FoldedCornerSticky() {
         }}
         onBlur={hideSoon}
         onClick={toggle}
-        className="absolute bottom-5 left-5 h-10 w-[118px] cursor-default border-0 bg-transparent p-0 pointer-events-auto focus-visible:outline-none"
+        className="absolute bottom-5 left-5 h-5 cursor-default border-0 bg-transparent p-0 pointer-events-auto focus-visible:outline-none"
       >
         <m.span
-          animate={open ? { scale: 1.02, y: -1 } : { scale: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 420, damping: 32 }}
-          className="absolute inset-0 flex items-center justify-center gap-2"
+          animate={open ? { opacity: 0.95 } : { opacity: 0.62 }}
+          transition={{ duration: 0.16 }}
+          className="block"
           style={{
-            borderRadius: 999,
-            border: "1px solid rgba(28, 58, 64, 0.18)",
-            background:
-              "linear-gradient(145deg, rgba(255, 253, 239, 0.9), rgba(220, 238, 235, 0.78))",
-            boxShadow: "0 12px 32px rgba(19, 51, 58, 0.18), 0 1px 0 rgba(255,255,255,0.75) inset",
-            color: "rgba(22, 49, 55, 0.76)",
-            fontFamily: DISPLAY,
-            fontSize: "0.7rem",
+            color: "rgba(20, 43, 49, 0.78)",
+            fontFamily: SANS,
+            fontSize: "0.58rem",
             fontWeight: 600,
-            letterSpacing: "0.1em",
+            letterSpacing: "0.16em",
             textTransform: "uppercase",
           }}
         >
-          <span
-            aria-hidden="true"
-            className="block h-1.5 w-1.5 rounded-full"
-            style={{ background: "rgba(42, 105, 111, 0.58)" }}
-          />
           bench
         </m.span>
       </button>
