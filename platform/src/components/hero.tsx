@@ -396,9 +396,7 @@ function MobileOrbitCard({
           style={{
             borderRadius: 14,
             border: "1px solid rgba(21, 47, 54, 0.14)",
-            boxShadow: isCenter
-              ? "0 26px 70px rgba(19, 54, 64, 0.34), 0 8px 20px rgba(17, 36, 44, 0.16)"
-              : "0 18px 42px rgba(19, 54, 64, 0.2)",
+            boxShadow: "none",
           }}
         >
           <Image
