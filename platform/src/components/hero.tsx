@@ -609,14 +609,22 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
           ref={scopeRef}
           className="relative h-dvh overflow-hidden"
           style={{
-            backgroundImage: "url('/assets/hero-bg.webp'), url('/assets/hero-bg.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            background: "#d8d8d4",
           }}
         >
+          {/* ── Static monochrome background ── */}
+          <div
+            className="absolute inset-0 z-0 pointer-events-none"
+            style={{
+              backgroundImage: "url('/assets/hero-bg.webp'), url('/assets/hero-bg.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              filter: "grayscale(1) saturate(0) contrast(1.18) brightness(0.9)",
+            }}
+          />
 
           {/* ── Background overlay ── */}
-          <div className="absolute inset-0 z-[1] pointer-events-none" style={{ background: "rgba(90,60,150,0.16)" }} />
+          <div className="absolute inset-0 z-[1] pointer-events-none" style={{ background: "rgba(232, 232, 226, 0.2)" }} />
 
           {/* ── Background video (crossfades over the CSS bg image) ── */}
           <video
@@ -626,8 +634,8 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
             style={{
               opacity: videoVisible ? 1 : 0,
               transition: "opacity 1.5s ease",
-              filter: "grayscale(1) contrast(1.12) brightness(0.9)",
-              mixBlendMode: "luminosity",
+              filter: "grayscale(1) saturate(0) contrast(1.34) brightness(0.78)",
+              mixBlendMode: "normal",
             }}
           >
             <source src="/assets/video/hero-loop.webm" type="video/webm" />
