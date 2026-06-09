@@ -202,12 +202,10 @@ function StarBadge({ count }: { count: number | undefined }) {
 function DesktopCard({
   idea,
   stars,
-  delay,
   isTouch,
 }: {
   idea: Idea;
   stars: Record<string, number>;
-  delay: number;
   isTouch: boolean;
 }) {
   const [videoVisible, setVideoVisible] = useState(false);
@@ -262,9 +260,6 @@ function DesktopCard({
 
   return (
     <m.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
       className="sky-card-shell hidden md:block absolute z-[3]"
       data-float={idea.id}
       style={{ left: `${idea.x}%`, top: `${idea.y}%` }}
@@ -559,9 +554,9 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       gsap.set(".brand-char", { yPercent: 92, opacity: 0, rotateX: -45 });
       gsap.set(".brand-subtitle", { opacity: 0, y: 8 });
-      gsap.set(".sky-card-shell", { opacity: 0, y: 44, scale: 0.92, rotate: -3 });
+      gsap.set(".sky-card-shell", { opacity: 0, y: 24, scale: 0.96, rotate: -1.5 });
 
-      const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
+      const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
       intro
         .to(".brand-char", {
           yPercent: 0,
@@ -578,10 +573,10 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
             y: 0,
             scale: 1,
             rotate: 0,
-            duration: 0.72,
-            stagger: 0.12,
+            duration: 1.05,
+            stagger: { each: 0.11, from: "center" },
           },
-          "-=0.2"
+          "-=0.12"
         );
 
       if (!reducedMotion) {
@@ -688,12 +683,11 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
           <MobileOrbit ideas={IDEAS} stars={stars} />
 
           {/* ── Desktop: scattered absolute cards ── */}
-          {IDEAS.map((idea, i) => (
+          {IDEAS.map((idea) => (
             <DesktopCard
               key={idea.id}
               idea={idea}
               stars={stars}
-              delay={0.4 + i * 0.1}
               isTouch={isTouch}
             />
           ))}
