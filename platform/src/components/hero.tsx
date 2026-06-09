@@ -10,15 +10,11 @@ import {
   m,
   MotionConfig,
 } from "motion/react";
-import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
 import { useMountEffect } from "@/hooks/use-mount-effect";
 import { useVideoLoop } from "@/hooks/use-video-loop";
 import { useCenterVideoPlay } from "@/hooks/use-center-video-play";
-import { useEmblaSelected } from "@/hooks/use-embla-selected";
 import Magnet from "@/components/ui/magnet";
 
-const SERIF = "var(--font-instrument-serif), Georgia, serif";
 const SANS  = "var(--font-geist-sans), system-ui, sans-serif";
 const DISPLAY = "var(--font-bricolage), var(--font-geist-sans), system-ui, sans-serif";
 
@@ -358,35 +354,51 @@ function DesktopCard({
   );
 }
 
-function MobileCard({
+function MobileOrbitCard({
   idea,
   stars,
   isCenter,
+  index,
+  setCardRef,
+  onSelect,
 }: {
   idea: Idea;
   stars: Record<string, number>;
   isCenter: boolean;
+  index: number;
+  setCardRef: (index: number, node: HTMLDivElement | null) => void;
+  onSelect: () => void;
 }) {
   const { videoRef, videoVisible } = useCenterVideoPlay(isCenter);
 
   return (
     <div
-      className="relative flex-none h-full"
-      style={{ paddingLeft: "7vw", width: "79vw" }}
+      ref={(node) => setCardRef(index, node)}
+      className="mobile-orbit-card absolute left-1/2 top-0 h-full"
+      style={{ width: "min(72vw, 330px)", willChange: "transform, opacity" }}
     >
       <a
         href={idea.href}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={(event) => {
+          if (!isCenter) {
+            event.preventDefault();
+            onSelect();
+          }
+        }}
         className="group block h-full focus-visible:outline-none"
         draggable={false}
+        aria-current={isCenter ? "true" : undefined}
       >
         <div
           className="relative h-full w-full overflow-hidden"
           style={{
-            borderRadius: 16,
-            border: "1px solid rgba(255,255,255,0.3)",
-            boxShadow: "0 12px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)",
+            borderRadius: 14,
+            border: "1px solid rgba(21, 47, 54, 0.14)",
+            boxShadow: isCenter
+              ? "0 26px 70px rgba(19, 54, 64, 0.34), 0 8px 20px rgba(17, 36, 44, 0.16)"
+              : "0 18px 42px rgba(19, 54, 64, 0.2)",
           }}
         >
           <Image
@@ -396,7 +408,7 @@ function MobileCard({
             loading="lazy"
             className="absolute inset-0 w-full h-full object-cover"
             draggable={false}
-            sizes="79vw"
+            sizes="72vw"
           />
           {idea.video && (
             <video
@@ -417,12 +429,12 @@ function MobileCard({
           />
           <div className="absolute bottom-0 left-0 right-0 p-4">
             <h3 style={{
-              fontFamily: SERIF,
+              fontFamily: DISPLAY,
               fontSize:   "1.15rem",
-              fontWeight: 400,
+              fontWeight: 550,
               color:      "#fff",
               textShadow: "0 1px 4px rgba(0,0,0,0.5)",
-              lineHeight: 1.2,
+              lineHeight: 1.08,
             }}>
               {idea.title}
             </h3>
@@ -438,6 +450,99 @@ function MobileCard({
           </div>
         </div>
       </a>
+    </div>
+  );
+}
+
+function MobileOrbit({
+  ideas,
+  stars,
+}: {
+  ideas: Idea[];
+  stars: Record<string, number>;
+}) {
+  const [active, setActive] = useState(0);
+  const scopeRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const touchStartX = useRef<number | null>(null);
+
+  const setCardRef = (index: number, node: HTMLDivElement | null) => {
+    cardRefs.current[index] = node;
+  };
+
+  const select = (index: number) => {
+    setActive((index + ideas.length) % ideas.length);
+  };
+
+  useGSAP(
+    () => {
+      const positions = [
+        { x: "-50%", y: 0, scale: 1, rotate: 0, opacity: 1, zIndex: 4, filter: "blur(0px)" },
+        { x: "18%", y: 26, scale: 0.72, rotate: 7, opacity: 0.72, zIndex: 3, filter: "blur(0px)" },
+        { x: "-50%", y: -18, scale: 0.58, rotate: 0, opacity: 0, zIndex: 1, filter: "blur(2px)" },
+        { x: "-118%", y: 26, scale: 0.72, rotate: -7, opacity: 0.72, zIndex: 3, filter: "blur(0px)" },
+      ];
+
+      cardRefs.current.forEach((card, index) => {
+        if (!card) return;
+        const offset = (index - active + ideas.length) % ideas.length;
+        const position = positions[offset] ?? positions[2];
+        gsap.to(card, {
+          ...position,
+          duration: 0.68,
+          ease: "expo.out",
+          overwrite: true,
+        });
+      });
+    },
+    { scope: scopeRef, dependencies: [active, ideas.length] }
+  );
+
+  return (
+    <div
+      ref={scopeRef}
+      className="md:hidden absolute inset-x-0 z-[3] overflow-hidden"
+      style={{ top: "23%", height: "38vh", perspective: 1000, touchAction: "pan-y" }}
+      onTouchStart={(event) => {
+        touchStartX.current = event.touches[0]?.clientX ?? null;
+      }}
+      onTouchEnd={(event) => {
+        if (touchStartX.current === null) return;
+        const endX = event.changedTouches[0]?.clientX ?? touchStartX.current;
+        const delta = endX - touchStartX.current;
+        touchStartX.current = null;
+        if (Math.abs(delta) < 34) return;
+        select(active + (delta < 0 ? 1 : -1));
+      }}
+    >
+      {ideas.map((idea, index) => (
+        <MobileOrbitCard
+          key={idea.id}
+          idea={idea}
+          stars={stars}
+          isCenter={active === index}
+          index={index}
+          setCardRef={setCardRef}
+          onSelect={() => select(index)}
+        />
+      ))}
+      <div
+        className="absolute bottom-1 left-0 right-0 flex justify-center gap-1.5"
+        aria-hidden="true"
+      >
+        {ideas.map((idea, index) => (
+          <span
+            key={idea.id}
+            style={{
+              width: active === index ? 16 : 5,
+              height: 5,
+              borderRadius: 999,
+              background: active === index ? "rgba(22, 55, 63, 0.62)" : "rgba(22, 55, 63, 0.24)",
+              transition: "width 0.25s ease, background 0.25s ease",
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -498,13 +603,6 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
     },
     { scope: scopeRef }
   );
-
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: "center", skipSnaps: false, dragFree: false },
-    [Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true })]
-  );
-
-  const centeredIndex = useEmblaSelected(emblaApi);
 
   return (
     <MotionConfig reducedMotion="user">
@@ -580,24 +678,8 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
             </p>
           </div>
 
-          {/* ── Mobile: Embla carousel ── */}
-          <div
-            className="md:hidden absolute inset-x-0 z-[3]"
-            style={{ top: "22%", height: "38vh" }}
-          >
-            <div ref={emblaRef} className="overflow-hidden h-full">
-              <div className="flex h-full" style={{ marginLeft: "-7vw" }}>
-                {IDEAS.map((idea, i) => (
-                  <MobileCard
-                    key={idea.id}
-                    idea={idea}
-                    stars={stars}
-                    isCenter={centeredIndex === i}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* ── Mobile: GSAP orbit carousel ── */}
+          <MobileOrbit ideas={IDEAS} stars={stars} />
 
           {/* ── Desktop: scattered absolute cards ── */}
           {IDEAS.map((idea, i) => (
