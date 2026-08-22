@@ -554,20 +554,12 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
   useGSAP(
     () => {
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      gsap.set(".brand-char", { yPercent: 92, opacity: 0, rotateX: -45 });
       gsap.set(".brand-subtitle", { opacity: 0, y: 8 });
       gsap.set(".sky-card-shell", { opacity: 0, y: 24, scale: 0.96, rotate: -1.5 });
 
       const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
       intro
-        .to(".brand-char", {
-          yPercent: 0,
-          opacity: 1,
-          rotateX: 0,
-          duration: 0.85,
-          stagger: 0.035,
-        })
-        .to(".brand-subtitle", { opacity: 1, y: 0, duration: 0.7 }, "-=0.45")
+        .to(".brand-subtitle", { opacity: 1, y: 0, duration: 0.7 })
         .to(
           ".sky-card-shell",
           {
@@ -639,34 +631,13 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
             <source src="/assets/video/hero-loop.mp4"  type="video/mp4"  />
           </video>
 
-          {/* ── Logo + tagline lockup ── */}
-          <div className="absolute inset-x-0 z-[5] flex flex-col items-center top-0 md:top-[4%] pt-3 md:pt-0 gap-1.5">
+          {/* ── Tagline ── */}
+          <div className="absolute inset-x-0 z-[5] flex justify-center top-0 md:top-[4%] pt-4 md:pt-0">
             <h1
-              style={{
-                fontFamily: DISPLAY,
-                fontSize: "clamp(2.8rem, 9vw, 5.3rem)",
-                fontWeight: 600,
-                fontStyle: "normal",
-                letterSpacing: 0,
-                color: "rgba(245, 245, 242, 0.94)",
-                lineHeight: 1,
-                userSelect: "none",
-                margin: 0,
-              }}
-            >
-              <span className="inline-flex overflow-hidden pb-1" aria-label="ideabench">
-                {"ideabench".split("").map((char, index) => (
-                  <span key={`${char}-${index}`} className="brand-char inline-block">
-                    {char}
-                  </span>
-                ))}
-              </span>
-            </h1>
-            <p
               className="brand-subtitle"
               style={{
                 fontFamily: SANS,
-                fontSize: "clamp(0.62rem, 0.9vw, 0.78rem)",
+                fontSize: "clamp(0.72rem, 1.1vw, 0.9rem)",
                 fontStyle: "normal",
                 fontWeight: 500,
                 letterSpacing: "0.12em",
@@ -674,11 +645,11 @@ export default function Hero({ stars = {} }: { stars?: Record<string, number> })
                 color: "rgba(12, 18, 20, 0.72)",
                 lineHeight: 1,
                 userSelect: "none",
-                margin: "0.35rem 0 0",
+                margin: 0,
               }}
             >
-              Where my ideas grow.
-            </p>
+              Where my ideas grow 🌱
+            </h1>
           </div>
 
           {/* ── Mobile: GSAP orbit carousel ── */}
