@@ -15,16 +15,20 @@ async function fetchStars(repo: string): Promise<number> {
 }
 
 export default async function Home() {
-  const [starsPersonal, starsANC, starsLR] = await Promise.all([
+  const [starsPersonal, starsANC, starsLR, starsSmallDesign, starsOpenYoko] = await Promise.all([
     fetchStars("ThoBustos/thomasbustosv2"),
     fetchStars("ThoBustos/ainativeclub"),
     fetchStars("ThoBustos/learnrep"),
+    fetchStars("ThoBustos/smalldesign"),
+    fetchStars("ThoBustos/yoko-os"),
   ]);
 
   const stars: Record<string, number> = {
     "ThoBustos/thomasbustosv2": starsPersonal,
     "ThoBustos/ainativeclub":   starsANC,
     "ThoBustos/learnrep":       starsLR,
+    "ThoBustos/smalldesign":    starsSmallDesign,
+    "ThoBustos/yoko-os":        starsOpenYoko,
   };
 
   return (

@@ -177,10 +177,11 @@ type Idea = {
 };
 
 const IDEAS: Idea[] = [
-  { id: 1, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.webp", video: "/assets/ideas/thomasbustos.mp4",  href: "https://thomasbustos.com",              github: "ThoBustos/thomasbustosv2", x: 7,  y: 25, rotate: -4   },
-  { id: 2, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.webp", video: "/assets/ideas/ainativeclub.mp4",  href: "https://www.ainativeclub.com/",         github: "ThoBustos/ainativeclub",   x: 31, y: 31, rotate: 1.5  },
-  { id: 3, title: "LearnRep",         image: "/assets/ideas/learnrep.webp",     video: "/assets/ideas/learnrep.mp4",      href: "https://learnrep.ideabench.ai",         github: "ThoBustos/learnrep",       x: 58, y: 24, rotate: -1.5 },
-  { id: 4, title: "small.design",      image: "/assets/ideas/smalldesign.png",   video: "/assets/ideas/smalldesign.mp4",   href: "https://small.design",                 github: "ThoBustos/smalldesign",    x: 78, y: 33, rotate: 3.5  },
+  { id: 1, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.webp", video: "/assets/ideas/thomasbustos.mp4", href: "https://thomasbustos.com",      github: "ThoBustos/thomasbustosv2", x: 3,  y: 25, rotate: -4   },
+  { id: 2, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.webp", video: "/assets/ideas/ainativeclub.mp4", href: "https://www.ainativeclub.com/", github: "ThoBustos/ainativeclub",   x: 22, y: 31, rotate: 1.5  },
+  { id: 3, title: "LearnRep",         image: "/assets/ideas/learnrep.webp",     video: "/assets/ideas/learnrep.mp4",     href: "https://learnrep.ideabench.ai", github: "ThoBustos/learnrep",       x: 41, y: 24, rotate: -1.5 },
+  { id: 4, title: "small.design",     image: "/assets/ideas/smalldesign.png",   video: "/assets/ideas/smalldesign.mp4",  href: "https://small.design",         github: "ThoBustos/smalldesign",    x: 60, y: 32, rotate: 3.5  },
+  { id: 5, title: "OpenYoko",        image: "/assets/ideas/openyoko.webp",     video: "/assets/ideas/openyoko.mp4",     href: "https://openyoko.com",         github: "ThoBustos/yoko-os",        x: 79, y: 26, rotate: -2.5 },
 ];
 
 function StarBadge({ count }: { count: number | undefined }) {
@@ -472,7 +473,8 @@ function MobileOrbit({
       const positions = [
         { x: "-50%", y: 0, scale: 1, rotate: 0, opacity: 1, zIndex: 4, filter: "blur(0px)" },
         { x: "18%", y: 26, scale: 0.72, rotate: 7, opacity: 0.72, zIndex: 3, filter: "blur(0px)" },
-        { x: "-50%", y: -18, scale: 0.58, rotate: 0, opacity: 0, zIndex: 1, filter: "blur(2px)" },
+        { x: "55%", y: -18, scale: 0.58, rotate: 0, opacity: 0, zIndex: 1, filter: "blur(2px)" },
+        { x: "-155%", y: -18, scale: 0.58, rotate: 0, opacity: 0, zIndex: 1, filter: "blur(2px)" },
         { x: "-118%", y: 26, scale: 0.72, rotate: -7, opacity: 0.72, zIndex: 3, filter: "blur(0px)" },
       ];
 
