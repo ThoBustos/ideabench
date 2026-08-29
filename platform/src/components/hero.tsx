@@ -177,12 +177,12 @@ type Idea = {
 };
 
 const IDEAS: Idea[] = [
-  { id: 1, title: "OpenYoko",        image: "/assets/ideas/openyoko.webp",     video: "/assets/ideas/openyoko.mp4",     href: "https://openyoko.com",          github: "ThoBustos/yoko-os",        x: 1,    y: 25, rotate: -4   },
-  { id: 2, title: "small.design",     image: "/assets/ideas/smalldesign.png",   video: "/assets/ideas/smalldesign.mp4",  href: "https://small.design",          github: "ThoBustos/smalldesign",    x: 17.3, y: 31, rotate: 1.5  },
-  { id: 3, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.webp", video: "/assets/ideas/thomasbustos.mp4", href: "https://thomasbustos.com",       github: "ThoBustos/thomasbustosv2", x: 33.6, y: 24, rotate: -1.5 },
-  { id: 4, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.webp", video: "/assets/ideas/ainativeclub.mp4", href: "https://www.ainativeclub.com/",  github: "ThoBustos/ainativeclub",   x: 49.9, y: 32, rotate: 3.5  },
-  { id: 5, title: "LearnRep",         image: "/assets/ideas/learnrep.webp",     video: "/assets/ideas/learnrep.mp4",     href: "https://learnrep.ideabench.ai", github: "ThoBustos/learnrep",       x: 66.2, y: 26, rotate: -2.5 },
-  { id: 6, title: "Napkin Academy",   image: "/assets/ideas/napkin.webp",       video: "/assets/ideas/napkin.mp4",       href: "https://napkin.academy",                                          x: 82.5, y: 33, rotate: 2.5  },
+  { id: 1, title: "OpenYoko",        image: "/assets/ideas/openyoko.webp",     video: "/assets/ideas/openyoko.mp4",     href: "https://openyoko.com",          github: "ThoBustos/yoko-os",        x: 6,  y: 18, rotate: -4   },
+  { id: 2, title: "small.design",     image: "/assets/ideas/smalldesign.png",   video: "/assets/ideas/smalldesign.mp4",  href: "https://small.design",          github: "ThoBustos/smalldesign",    x: 39, y: 21, rotate: 1.5  },
+  { id: 3, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.webp", video: "/assets/ideas/thomasbustos.mp4", href: "https://thomasbustos.com",       github: "ThoBustos/thomasbustosv2", x: 72, y: 17, rotate: -1.5 },
+  { id: 4, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.webp", video: "/assets/ideas/ainativeclub.mp4", href: "https://www.ainativeclub.com/",  github: "ThoBustos/ainativeclub",   x: 17, y: 48, rotate: 3.5  },
+  { id: 5, title: "LearnRep",         image: "/assets/ideas/learnrep.webp",     video: "/assets/ideas/learnrep.mp4",     href: "https://learnrep.ideabench.ai", github: "ThoBustos/learnrep",       x: 50, y: 45, rotate: -2.5 },
+  { id: 6, title: "Napkin Academy",   image: "/assets/ideas/napkin.webp",       video: "/assets/ideas/napkin.mp4",       href: "https://napkin.academy",                                          x: 83, y: 49, rotate: 2.5  },
 ];
 
 function StarBadge({ count }: { count: number | undefined }) {
