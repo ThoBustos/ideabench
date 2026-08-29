@@ -170,18 +170,19 @@ type Idea = {
   image: string;
   video: string;
   href: string;
-  github: string;
+  github?: string;
   x: number;
   y: number;
   rotate: number;
 };
 
 const IDEAS: Idea[] = [
-  { id: 1, title: "OpenYoko",        image: "/assets/ideas/openyoko.webp",     video: "/assets/ideas/openyoko.mp4",     href: "https://openyoko.com",          github: "ThoBustos/yoko-os",        x: 3,  y: 25, rotate: -4   },
-  { id: 2, title: "small.design",     image: "/assets/ideas/smalldesign.png",   video: "/assets/ideas/smalldesign.mp4",  href: "https://small.design",          github: "ThoBustos/smalldesign",    x: 22, y: 31, rotate: 1.5  },
-  { id: 3, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.webp", video: "/assets/ideas/thomasbustos.mp4", href: "https://thomasbustos.com",       github: "ThoBustos/thomasbustosv2", x: 41, y: 24, rotate: -1.5 },
-  { id: 4, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.webp", video: "/assets/ideas/ainativeclub.mp4", href: "https://www.ainativeclub.com/",  github: "ThoBustos/ainativeclub",   x: 60, y: 32, rotate: 3.5  },
-  { id: 5, title: "LearnRep",         image: "/assets/ideas/learnrep.webp",     video: "/assets/ideas/learnrep.mp4",     href: "https://learnrep.ideabench.ai", github: "ThoBustos/learnrep",       x: 79, y: 26, rotate: -2.5 },
+  { id: 1, title: "OpenYoko",        image: "/assets/ideas/openyoko.webp",     video: "/assets/ideas/openyoko.mp4",     href: "https://openyoko.com",          github: "ThoBustos/yoko-os",        x: 1,    y: 25, rotate: -4   },
+  { id: 2, title: "small.design",     image: "/assets/ideas/smalldesign.png",   video: "/assets/ideas/smalldesign.mp4",  href: "https://small.design",          github: "ThoBustos/smalldesign",    x: 17.3, y: 31, rotate: 1.5  },
+  { id: 3, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.webp", video: "/assets/ideas/thomasbustos.mp4", href: "https://thomasbustos.com",       github: "ThoBustos/thomasbustosv2", x: 33.6, y: 24, rotate: -1.5 },
+  { id: 4, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.webp", video: "/assets/ideas/ainativeclub.mp4", href: "https://www.ainativeclub.com/",  github: "ThoBustos/ainativeclub",   x: 49.9, y: 32, rotate: 3.5  },
+  { id: 5, title: "LearnRep",         image: "/assets/ideas/learnrep.webp",     video: "/assets/ideas/learnrep.mp4",     href: "https://learnrep.ideabench.ai", github: "ThoBustos/learnrep",       x: 66.2, y: 26, rotate: -2.5 },
+  { id: 6, title: "Napkin Academy",   image: "/assets/ideas/napkin.webp",       video: "/assets/ideas/napkin.mp4",       href: "https://napkin.academy",                                          x: 82.5, y: 33, rotate: 2.5  },
 ];
 
 function StarBadge({ count }: { count: number | undefined }) {
@@ -321,7 +322,7 @@ function DesktopCard({
               style={{ background: "linear-gradient(to top, rgba(9,15,20,0.72) 0%, rgba(9,15,20,0.18) 38%, transparent 58%)" }}
             />
             <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-              <StarBadge count={stars[idea.github]} />
+              <StarBadge count={idea.github ? stars[idea.github] : undefined} />
             </div>
             <div className="absolute bottom-0 left-0 right-0 p-4">
               <span
@@ -439,7 +440,7 @@ function MobileOrbitCard({
               >
                 Explore →
               </span>
-              <StarBadge count={stars[idea.github]} />
+              <StarBadge count={idea.github ? stars[idea.github] : undefined} />
             </div>
           </div>
         </div>
@@ -474,6 +475,7 @@ function MobileOrbit({
         { x: "-50%", y: 0, scale: 1, rotate: 0, opacity: 1, zIndex: 4, filter: "blur(0px)" },
         { x: "18%", y: 26, scale: 0.72, rotate: 7, opacity: 0.72, zIndex: 3, filter: "blur(0px)" },
         { x: "55%", y: -18, scale: 0.58, rotate: 0, opacity: 0, zIndex: 1, filter: "blur(2px)" },
+        { x: "-50%", y: -24, scale: 0.52, rotate: 0, opacity: 0, zIndex: 0, filter: "blur(3px)" },
         { x: "-155%", y: -18, scale: 0.58, rotate: 0, opacity: 0, zIndex: 1, filter: "blur(2px)" },
         { x: "-118%", y: 26, scale: 0.72, rotate: -7, opacity: 0.72, zIndex: 3, filter: "blur(0px)" },
       ];
