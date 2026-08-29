@@ -182,7 +182,7 @@ const IDEAS: Idea[] = [
   { id: 3, title: "thomasbustos.com", image: "/assets/ideas/thomasbustos.webp", video: "/assets/ideas/thomasbustos.mp4", href: "https://thomasbustos.com",       github: "ThoBustos/thomasbustosv2", x: 72, y: 17, rotate: -1.5 },
   { id: 4, title: "AI Native Club",   image: "/assets/ideas/ainativeclub.webp", video: "/assets/ideas/ainativeclub.mp4", href: "https://www.ainativeclub.com/",  github: "ThoBustos/ainativeclub",   x: 17, y: 48, rotate: 3.5  },
   { id: 5, title: "LearnRep",         image: "/assets/ideas/learnrep.webp",     video: "/assets/ideas/learnrep.mp4",     href: "https://learnrep.ideabench.ai", github: "ThoBustos/learnrep",       x: 50, y: 45, rotate: -2.5 },
-  { id: 6, title: "Napkin Academy",   image: "/assets/ideas/napkin.webp",       video: "/assets/ideas/napkin.mp4",       href: "https://napkin.academy",                                          x: 83, y: 49, rotate: 2.5  },
+  { id: 6, title: "Napkin Academy",   image: "/assets/ideas/napkin.webp",       video: "/assets/ideas/napkin.mp4",       href: "https://napkin.academy",         github: "ThoBustos/napkin",         x: 83, y: 49, rotate: 2.5  },
 ];
 
 function StarBadge({ count }: { count: number | undefined }) {
